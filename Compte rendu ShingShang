@@ -1,0 +1,36 @@
+## Projet Shing Shang ##
+Charge :
+  Pion:
+    |Type : Dragon (D), Lion (L), Singe (S)
+    |Coordonnées : x;y
+    |(Case : pointeur vers la case que le pion occupe)
+    |Team : équipe du pion
+    =
+  Case:
+    |Pion : pointeur vers le pion qui occupe la case, NULL si aucun dessus.
+    |Coordonnées : x;y
+    |Type : Hors Plateau (-1), Normal (0), baseRouge(1), baseBleue(2)
+    =
+  Plateau: tableau de Case
+
+Réalisation du projet:
+étape 1:
+  Création des structure Square, Piece, Team.
+  Création du tableau Map qui contiens la liste des case du plateau
+étape 2: avoir un rendu
+  création de la méthode printMap
+3) fonction de placement des pions
+  trouver la boucle qui placent les pion dans chaque coins
+4) Boucle while qui simule une partie
+  chaque tour de boucle représente un tour de joueur
+    1. Recuperer les coordonnée du pion que le joueur veut bouger
+    2. Tester si : Il lui appartient, s'il est dans le plateau.
+    2.1 verifier qu'au moins un mouvement est possible
+    3 Recuperer les coordonnée de la case voulu
+    4. Tester si :
+      la case est libre,
+      il peux y acceder
+        Le pion a sauter est de meme taille ou plus petit
+    5.Tester si il existe encore une possible, si oui reitéré le proc sinon souhaitez
+    6.Changer de joueur
+Compartimenter le code en fichier distinct.

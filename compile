@@ -1,0 +1,3 @@
+#! /bin/bash
+clear
+gcc -lm -Wall graphConsole.c moteur.c ShingShang.c -o Shing
