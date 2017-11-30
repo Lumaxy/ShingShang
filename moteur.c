@@ -13,7 +13,7 @@ void getCoor(int *x, int *y){
   do{
     printf("Entrez x :\n");
     scanf("%c", &xChar);
-    
+
     //Vide buffer
     int c;
     do {
@@ -174,7 +174,7 @@ int numMove(int x, int y, Square map[][TAILLE]){
   return res;
 }
 
-int numJump(int x, int y, Square map[][TAILLE]){
+int numJump(int x, int y, int oldCoor[2], Square map[][TAILLE]){
   int res = 0, i, j;
 
   Square center = map[x][y];
@@ -183,8 +183,8 @@ int numJump(int x, int y, Square map[][TAILLE]){
     for(j = y -1; j <= y + 1; j++){
       //On test si les nouvelles coordonnées ne débordent pas du tableau et differente du centre
       if(i >= 0 && i <= 9 && j >= 0 && j <= 9){
-        //coord differente du centre
-        if(!(i == x && j == y)){
+        //coord differente du centre et de l'ancienne case
+        if(!(i == x && j == y) && !(i == oldCoor[0] && j == oldCoor[1])){
           Square tmp = map[i][j];
           //test du type de la map
           if(tmp.type >= 0){
