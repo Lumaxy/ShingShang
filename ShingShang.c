@@ -51,6 +51,7 @@ int main(int argc, char const *argv[]) {
   while(isPlaying){
     int x,y;
     int x1,y1;
+    int oldCoor[2] = {0,0};
 
     //TODO: verif si coord est chiffre, ex avec Maxence
     //C'est fait
@@ -89,12 +90,15 @@ int main(int argc, char const *argv[]) {
         }while(resMove != 1 && resJump != 1);
         move(&map[x][y], &map[x1][y1], x1, y1);
 
+
+        oldCoord[0] = x;
+        oldCoor[1] = y;
         x = x1;
         y = y1;
         int again = 0;
         //repeter tant que un saut est possible
         while(numJump(x,y,map) >= 1 && again == 0){
-          printf("souhaitez vous encore sauter ? O/N\n");
+          printf("Souhaitez vous encore sauter ? O/N\n");
           char rep;
           do{
             scanf("%c", &rep);
@@ -106,7 +110,7 @@ int main(int argc, char const *argv[]) {
               getCoor(&x1, &y1);
               resMove = testMove(x, y, x1, y1, map);
               resJump = testJump(x, y, x1, y1, map);
-            }while(resMove != 1 && resJump != 1);
+            }while((resMove != 1 && resJump != 1) || x == oldCoor[0] || y == oldCoor[1]);
             move(&map[x][y], &map[x1][y1], x1, y1);
 
           }else{
