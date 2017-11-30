@@ -7,7 +7,7 @@ void getCoor(int *x, int *y);
 int testCoor(int x, int y, Square map[][TAILLE], int player);
 
 int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]);
-int testJump(int x, int y, int x1, int y1, Square map[][TAILLE]);
+int testJump(int x, int y, int x1, int y1, int oldCoor[2], Square map[][TAILLE]);
 
 int numMove(int x, int y, Square map[][TAILLE]);
 int numJump(int x, int y, int oldCoor[2], Square map[][TAILLE]);

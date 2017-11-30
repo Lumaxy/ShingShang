@@ -70,6 +70,7 @@ int testCoor(int x, int y, Square map[][TAILLE], int player){
 
 int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
   int res = 0;
+
   if(map[x][y].isFill == 1){
     Square tmp = map[x1][y1];
     //Movement ?
@@ -82,9 +83,10 @@ int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
         switch(p1.type){
           //Singe mouvement de deux case dans la meme direction
           case 1:
-          if(distance(p1, x1, y1) <= 2*2){
+          printf("distance(p, x1, y1) : %d\n", distance(p1, x1, y1));
+          if(distance(p1, x1, y1) <= 2*2 && map[(x+x1)/2][(y+y1)/2].isFill == 0){
             // direction
-            //cas particulier
+            //cas particulier de droite x = k
             if(x1 == x){
               res = 1;
             }else{
@@ -113,13 +115,15 @@ int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
 
 //TODO: quand je choisis de nouveau la case il me change les coordonnées
 // et du coup ma case devient isFill == 0
-int testJump(int x, int y, int x1, int y1, Square map[][TAILLE]){
+int testJump(int x, int y, int x1, int y1, int oldCoor[2], Square map[][TAILLE]){
   int res = 0;
   //Test Jump
   Square center = map[x][y];
   Piece p = center.piece;
-
-  printf("distance(p, x1, y1) : %d\n", distance(p, x1, y1));
+  if(oldCoor[0] == x1 && oldCoor[1] == y){
+    printf("Impossible de faire retour\n");
+  }else{
+  printf("Jump distance(p, x1, y1) : %d\n", distance(p, x1, y1));
   if(distance(p, x1, y1) == 2*2){
     int xMoy = (x + x1) / 2;
     int yMoy = (y + y1) / 2;
@@ -144,7 +148,8 @@ int testJump(int x, int y, int x1, int y1, Square map[][TAILLE]){
   }else{
     printf("La case est trop loin\n" );
   }
-  return res;
+}
+return res;
 }
 
 
@@ -184,7 +189,7 @@ int numJump(int x, int y, int oldCoor[2], Square map[][TAILLE]){
       //On test si les nouvelles coordonnées ne débordent pas du tableau et differente du centre
       if(i >= 0 && i <= 9 && j >= 0 && j <= 9){
         //coord differente du centre et de l'ancienne case
-        if(!(i == x && j == y) && !(i == oldCoor[0] && j == oldCoor[1])){
+        if(!(i == x && j == y)){
           Square tmp = map[i][j];
           //test du type de la map
           if(tmp.type >= 0){
@@ -196,7 +201,7 @@ int numJump(int x, int y, int oldCoor[2], Square map[][TAILLE]){
                 //test des coor opposer, si elle sont bien dsans la grille
                 int xA = (2*i)-x;
                 int yA = (2*j)-y;
-                if(xA >= 0 || xA <= 9 || yA >= 0 || yA <= 9){
+                if(xA >= 0 && xA <= 9 && yA >= 0 && yA <= 9  && !(xA == oldCoor[0] && yA == oldCoor[1])){
 
                   // si bien possible( ou hors grille)
                   if(map[xA][yA].type >= 0){

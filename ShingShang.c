@@ -73,45 +73,60 @@ int main(int argc, char const *argv[]) {
       //Le Pion lui appartient
       //Test du nombre de coup possible (saut + move)
 
-      if(numJump(x, y, map)+numMove(x, y, map) >= 1){
-        // printf("Nombre de saut possible : %d\n", numJump(x, y, map));
-        // printf("Nombre de deplacement possible : %d\n", numMove(x, y, map));
-        // printf("Nombre TOTAL de coup : %d\n",numJump(x, y, map)+numMove(x, y, map));
+      if(numJump(x, y, oldCoor, map)+numMove(x, y, map) >= 1){
         couleur(32);
         printf("Vers quel point souhaitez vous le bouger ?\n");
         couleur(0);
-        //On test si la case pointer est bien libre et s'il peux y acceder
-        int resMove, resJump;
+
+        //------- Premier mouvement (Jump/Move) --------------------
+        int resMove = 0, resJump = 0;
         do{
           msg[0] = '\0';
           getCoor(&x1, &y1);
+          //On test si la case pointer est bien libre et s'il peux y acceder
           resMove = testMove(x, y, x1, y1, map);
-          resJump = testJump(x, y, x1, y1, map);
+          resJump = testJump(x, y, x1, y1,oldCoor, map);
         }while(resMove != 1 && resJump != 1);
         move(&map[x][y], &map[x1][y1], x1, y1);
+        printMap(map, squareColor);
+        //----------------------------------------------------------
 
-
-        oldCoord[0] = x;
+        oldCoor[0] = x;
         oldCoor[1] = y;
         x = x1;
         y = y1;
         int again = 0;
+
         //repeter tant que un saut est possible
-        while(numJump(x,y,map) >= 1 && again == 0){
-          printf("Souhaitez vous encore sauter ? O/N\n");
+        while(numJump(x, y, oldCoor, map) >= 1 && again == 0 && resMove == 0){
+          printf("Souhaitez vous encore sauter ? O/N (%d pos)\n", numJump(x, y, oldCoor, map));
           char rep;
           do{
             scanf("%c", &rep);
           }while(rep != 'O' && rep != 'N');
 
+          //Vide buffer
+          int c;
+          do {
+            c = getchar();
+          } while (c != EOF && c != '\n');
+          //------------------
+
           if(rep == 'O'){
+
             do{
               msg[0] = '\0';
               getCoor(&x1, &y1);
-              resMove = testMove(x, y, x1, y1, map);
-              resJump = testJump(x, y, x1, y1, map);
-            }while((resMove != 1 && resJump != 1) || x == oldCoor[0] || y == oldCoor[1]);
+              resJump = testJump(x, y, x1, y1, oldCoor, map);
+              printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldCoor[0], oldCoor[1], x, y, x1, y1, resJump);
+            }while(resJump != 1 || x1 == oldCoor[0] || y1 == oldCoor[1]);
+
             move(&map[x][y], &map[x1][y1], x1, y1);
+            printMap(map, squareColor);
+            oldCoor[0] = x;
+            oldCoor[1] = y;
+            x = x1;
+            y = y1;
 
           }else{
             again = 1;
