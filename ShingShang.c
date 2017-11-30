@@ -53,6 +53,7 @@ int main(int argc, char const *argv[]) {
     int x1,y1;
 
     //TODO: verif si coord est chiffre, ex avec Maxence
+    //C'est fait
 
     printMap(map, squareColor);
 
