@@ -14,12 +14,7 @@ void getCoor(int *x, int *y){
     printf("Entrez x :\n");
     scanf("%c", &xChar);
 
-    //Vide buffer
-    int c;
-    do {
-      c = getchar();
-    } while (c != EOF && c != '\n');
-    //------------------
+    clearBuffer();
 
     if((int)xChar >= 48 && (int)xChar <= 57){
       *x = (int)xChar - 48;
@@ -32,12 +27,7 @@ void getCoor(int *x, int *y){
     printf("Entrez y :\n");
     scanf("%c", &yChar);
 
-    //Vide buffer
-    int c;
-    do {
-      c = getchar();
-    } while (c != EOF && c != '\n');
-    //------------------
+    clearBuffer();
 
     if((int)yChar >= 48 && (int)yChar <= 57){
       *y = (int)yChar - 48;
@@ -58,7 +48,6 @@ int testCoor(int x, int y, Square map[][TAILLE], int player){
       Piece p = tmp.piece;
       //Le pion lui appartient ?
       if(p.team->numEquip == player){
-
         res = 1;
       }else{
         res = 2;
@@ -70,28 +59,32 @@ int testCoor(int x, int y, Square map[][TAILLE], int player){
 
 int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
   int res = 0;
+  int tmp = 0; //Permet de ne pas repeter le test du coef directeur
 
   if(map[x][y].isFill == 1){
-    Square tmp = map[x1][y1];
+    Square caseVisee = map[x1][y1];
     //Movement ?
     //test du type de la map
-    if(tmp.type == 0){
+    if(caseVisee.type == 0){
       //La case est elle occupé?
-      if(tmp.isFill == 0){
+      if(caseVisee.isFill == 0){
         //Mouvement autoriser selon le pion?
         Piece p1 = map[x][y].piece;
         switch(p1.type){
           //Singe mouvement de deux case dans la meme direction
           case 1:
           printf("distance(p, x1, y1) : %d\n", distance(p1, x1, y1));
-          if(distance(p1, x1, y1) <= 2*2 && map[(x+x1)/2][(y+y1)/2].isFill == 0){
-            // direction
-            //cas particulier de droite x = k
+          if(distance(p1, x1, y1) == 2*2 && map[(x+x1)/2][(y+y1)/2].isFill == 0){
+            tmp = 1;
+          }else if(distance(p1, x1, y1) == 1){
+            tmp = 1;
+          }
+          if(tmp == 1){
+            // Direction. cas particulier de droite x = k
             if(x1 == x){
               res = 1;
             }else{
-              //coef directeur
-              float coef = (y1 - y) / (x1 - x);
+              float coef = (y1 - y) / (x1 - x); //coef directeur
               if(abso(coef) == 1 || coef == 0){
                 res = 1;
               }
@@ -123,33 +116,33 @@ int testJump(int x, int y, int x1, int y1, int oldCoor[2], Square map[][TAILLE])
   if(oldCoor[0] == x1 && oldCoor[1] == y){
     printf("Impossible de faire retour\n");
   }else{
-  printf("Jump distance(p, x1, y1) : %d\n", distance(p, x1, y1));
-  if(distance(p, x1, y1) == 2*2){
-    int xMoy = (x + x1) / 2;
-    int yMoy = (y + y1) / 2;
+    printf("Jump distance(p, x1, y1) : %d\n", distance(p, x1, y1));
+    if(distance(p, x1, y1) == 2*2){
+      int xMoy = (x + x1) / 2;
+      int yMoy = (y + y1) / 2;
 
-    Piece p2 = map[xMoy][yMoy].piece;
+      Piece p2 = map[xMoy][yMoy].piece;
 
-    if(p.type >= p2.type){
-      //possibilité de sauter
-      res = 1;
+      if(p.type >= p2.type){
+        //possibilité de sauter
+        res = 1;
+      }
+
+    }else if(distance(p, x1, y1) == 8){
+      int xMoy = (x + x1) / 2;
+      int yMoy = (y + y1) / 2;
+      printf("%d//%d\n", xMoy, yMoy );
+      Piece p2 = map[xMoy][yMoy].piece;
+
+      if(p.type >= p2.type){
+        //possibilité de sauter
+        res = 1;
+      }
+    }else{
+      printf("La case n'est pas a la bonne distance de saut\n" );
     }
-
-  }else if(distance(p, x1, y1) == 8){
-    int xMoy = (x + x1) / 2;
-    int yMoy = (y + y1) / 2;
-    printf("%d//%d\n", xMoy, yMoy );
-    Piece p2 = map[xMoy][yMoy].piece;
-
-    if(p.type >= p2.type){
-      //possibilité de sauter
-      res = 1;
-    }
-  }else{
-    printf("La case est trop loin\n" );
   }
-}
-return res;
+  return res;
 }
 
 
@@ -309,7 +302,28 @@ void initPiece(Square map[][TAILLE], Team *red, Team *blue){
       map[x][y].isFill = 1;
     }
   }
+  Piece p = {1, 4, 1, red};
+  map[1][4].piece = p;
+  map[1][4].isFill = 1;
+
+  p.x = 2;
+  p.y = 4;
+  p.type = 1;
+  p.team = blue;
+  map[2][4].piece = p;
+  map[2][4].isFill = 1;
+
+  p.x = 4;
+  p.y = 4;
+  map[4][4].piece = p;
+  map[4][4].isFill = 1;
+  p.x = 6;
+  p.y = 4;
+  p.team = red;
+  map[6][4].piece = p;
+  map[6][4].isFill = 1;
 }
+
 
 void move(Square *s1, Square *s2, int x, int y){
   Piece p = s1->piece;
@@ -326,4 +340,13 @@ void testWin(int *isplaying, Square map[][TAILLE]){
 
 
 
+}
+
+void clearBuffer(){
+  //Vide buffer
+  int c;
+  do {
+    c = getchar();
+  } while (c != EOF && c != '\n');
+  //------------------
 }
