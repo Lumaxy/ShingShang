@@ -319,7 +319,7 @@ void initPiece(Square map[][TAILLE], Team *red, Team *blue){
   map[4][4].isFill = 1;
   p.x = 6;
   p.y = 4;
-  p.team = red;
+  p.team = blue;
   map[6][4].piece = p;
   map[6][4].isFill = 1;
 }

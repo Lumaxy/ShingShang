@@ -97,7 +97,7 @@ int main(int argc, char const *argv[]) {
           getCoor(&x1, &y1);
           //On test si la case pointer est bien libre et s'il peux y acceder
           resMove = testMove(x, y, x1, y1, map);
-          //Permet d'eviter que le pion apres avoir bouger puisse sauter 
+          //Permet d'eviter que le pion apres avoir bouger puisse sauter
           if(resMove == 0){
             resJump = testJump(x, y, x1, y1,oldCoor, map);
           }
@@ -138,7 +138,7 @@ int main(int argc, char const *argv[]) {
             //Execution
             move(&map[x][y], &map[x1][y1], x1, y1);
             sautTotal++;
-            if (sautTotal >= 3) {
+            if (sautTotal >= 2) {
               //Alors on supprime le pion de la case au milieu Si le pion est de l'equipe adverse
               if(map[(x+x1)/2][(y+y1)/2].piece.team->numEquip != player){
                 map[(x+x1)/2][(y+y1)/2].isFill = 0;
