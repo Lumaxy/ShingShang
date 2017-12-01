@@ -1,3 +1,11 @@
+/*
+###################################
+# Nom du projet : ShingShang      #
+# Auteur : Maxence Morin          #
+# Version : v0.4                  #
+###################################
+*/
+
 #include <stdio.h>
 #include <string.h>
 
@@ -24,21 +32,27 @@
 37 Blanc
 */
 
+/*
+###################DEBUG####################
+printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldCoor[0], oldCoor[1], x, y, x1, y1, resJump);
+
+*/
+
 
 int main(int argc, char const *argv[]) {
   srand(time(NULL));
   int squareColor = 33;
-  int isPlaying = 1;
-  int player = (rand() % (2 - 1 + 1) + 1);
+  int isPlaying = 1; //tant que personne ne gagne, isPlaying = 1
+  int player = (rand()% 2) + 1; // Premier joueur a jouer
+  //Message indicatif pour le joueur
   char msg[50];
   msg[0] = '\0';
   int msgColor = 31;
 
-  Square map[TAILLE][TAILLE];
+  Square map[TAILLE][TAILLE]; // Plateau de jeu
 
-  // printf("%f\n", abso(-1.0);
-
-  player = 1;
+  //A SUPPRIMER
+  player = 1; // Forcer le premier joueur pour les test
 
   //Liste des equipe
   Team red = {31, 1};
@@ -47,14 +61,12 @@ int main(int argc, char const *argv[]) {
   initMap(map);
   initPiece(map, &red, &blue);
 
-
+  //Chaque boucle correspond a un tour.
   while(isPlaying){
-    int x,y;
-    int x1,y1;
-    int oldCoor[2] = {0,0};
-
-    //TODO: verif si coord est chiffre, ex avec Maxence
-    //C'est fait
+    int x,y; //Coordonnees actuelle
+    int x1,y1; //Coordonnees visees
+    int oldCoor[2] = {0,0}; //Coordonnees de la derniere case
+    int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
     printMap(map, squareColor);
 
@@ -68,11 +80,11 @@ int main(int argc, char const *argv[]) {
 
     //Obtention Coordonnée du pion à bouger
     getCoor(&x, &y);
+
     //Si le test est 1 c'est un de ses pion, il peux donc le bouger
     if(testCoor(x, y, map, player) == 1){
-      //Le Pion lui appartient
-      //Test du nombre de coup possible (saut + move)
 
+      //Test du nombre de coup possible (saut + move)
       if(numJump(x, y, oldCoor, map)+numMove(x, y, map) >= 1){
         couleur(32);
         printf("Vers quel point souhaitez vous le bouger ?\n");
@@ -85,8 +97,14 @@ int main(int argc, char const *argv[]) {
           getCoor(&x1, &y1);
           //On test si la case pointer est bien libre et s'il peux y acceder
           resMove = testMove(x, y, x1, y1, map);
-          resJump = testJump(x, y, x1, y1,oldCoor, map);
+          //Permet d'eviter que le pion apres avoir bouger puisse sauter 
+          if(resMove == 0){
+            resJump = testJump(x, y, x1, y1,oldCoor, map);
+          }
         }while(resMove != 1 && resJump != 1);
+        if (resJump == 1) {
+          sautTotal++;
+        }
         move(&map[x][y], &map[x1][y1], x1, y1);
         printMap(map, squareColor);
         //----------------------------------------------------------
@@ -95,34 +113,39 @@ int main(int argc, char const *argv[]) {
         oldCoor[1] = y;
         x = x1;
         y = y1;
-        int again = 0;
 
-        //repeter tant que un saut est possible
+        //--------- Suite de saut ---------------------------------------
+        int again = 0;
         while(numJump(x, y, oldCoor, map) >= 1 && again == 0 && resMove == 0){
           printf("Souhaitez vous encore sauter ? O/N (%d pos)\n", numJump(x, y, oldCoor, map));
+
+          //Obtention de la reponse du joueur
           char rep;
           do{
             scanf("%c", &rep);
-          }while(rep != 'O' && rep != 'N');
-
-          //Vide buffer
-          int c;
-          do {
-            c = getchar();
-          } while (c != EOF && c != '\n');
-          //------------------
+          }while(rep != 'O' && rep != 'N' && rep != 'o' && rep != 'n');
+          clearBuffer();
+          //----------------------------------
 
           if(rep == 'O'){
-
             do{
               msg[0] = '\0';
+              //Recup des nouvelle Coordonnees
               getCoor(&x1, &y1);
               resJump = testJump(x, y, x1, y1, oldCoor, map);
               printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldCoor[0], oldCoor[1], x, y, x1, y1, resJump);
-            }while(resJump != 1 || x1 == oldCoor[0] || y1 == oldCoor[1]);
-
+            }while(resJump != 1 || (x1 == oldCoor[0] && y1 == oldCoor[1]));
+            //Execution
             move(&map[x][y], &map[x1][y1], x1, y1);
+            sautTotal++;
+            if (sautTotal >= 3) {
+              //Alors on supprime le pion de la case au milieu Si le pion est de l'equipe adverse
+              if(map[(x+x1)/2][(y+y1)/2].piece.team->numEquip != player){
+                map[(x+x1)/2][(y+y1)/2].isFill = 0;
+              }
+            }
             printMap(map, squareColor);
+
             oldCoor[0] = x;
             oldCoor[1] = y;
             x = x1;
@@ -132,14 +155,17 @@ int main(int argc, char const *argv[]) {
             again = 1;
           }
         }
+        //--------------------------------------------------------------
 
         testWin(&isPlaying, map);
 
+        //Changement de joueur
         if(player == 1){
           player++;
         }else{
           player--;
         }
+        //--------------------
       }
 
     }else{
