@@ -56,6 +56,7 @@ int main(int argc, char const *argv[]) {
   int nbDragBlue = 2;
   //-----------------------------------------------------------------
   //TODO Menu pour choisir console / sdl / config
+  menu();
 
 
   Square map[TAILLE][TAILLE]; // Plateau de jeu
@@ -91,7 +92,6 @@ int main(int argc, char const *argv[]) {
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
     printMap(map, config);
-    menu();
 
     //On affiche le joueur actif
     printf("Joueur %d\n", player);
