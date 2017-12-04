@@ -48,6 +48,7 @@ int main(int argc, char const *argv[]) {
   char msg[50];
   msg[0] = '\0';
   int msgColor = 31;
+  int nbDrag = 4;
 
   Square map[TAILLE][TAILLE]; // Plateau de jeu
 
@@ -62,7 +63,7 @@ int main(int argc, char const *argv[]) {
   initPiece(map, &red, &blue);
 
   //Chaque boucle correspond a un tour.
-  while(isPlaying){
+  while(isPlaying && nbDrag > 0){
     int x,y; //Coordonnees actuelle
     int x1,y1; //Coordonnees visees
     int oldCoor[2] = {0,0}; //Coordonnees de la derniere case
@@ -106,6 +107,9 @@ int main(int argc, char const *argv[]) {
           sautTotal++;
         }
         move(&map[x][y], &map[x1][y1], x1, y1);
+        if(map[(x+x1)/2][(y+y1)/2].piece.type == 3){
+          nbDrag--;
+        }
         printMap(map, squareColor);
         //----------------------------------------------------------
 
