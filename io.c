@@ -14,6 +14,11 @@ int loadConfig(Config *config){
   if(file == NULL){
     fprintf(stderr, "Pas de fichier ou pas les droits.\n");
     file = fopen(filename, "w+");
+    fprintf(file, "%s = %s\n", "nameTeam1", "Les tigres");
+    fprintf(file, "%s = %d\n", "colorTeam1", 31);
+    fprintf(file, "%s = %s\n", "nameTeam2", "Les pieuvres");
+    fprintf(file, "%s = %d\n", "colorTeam2", 34);
+    fprintf(file, "%s = %d\n", "squareColor", 33);
     fclose(file);
     printf("Fichier de sauvegarde créé.\n");
     return 1;

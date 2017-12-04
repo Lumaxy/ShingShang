@@ -41,6 +41,7 @@ printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldC
 
 
 int main(int argc, char const *argv[]) {
+  //Initialisation des variables ---------------------------------
   Config config;
   loadConfig(&config);
   srand(time(NULL));
@@ -52,15 +53,23 @@ int main(int argc, char const *argv[]) {
   int msgColor = 31;
   int nbDragRed = 2;
   int nbDragBlue = 2;
+  //-----------------------------------------------------------------
 
   Square map[TAILLE][TAILLE]; // Plateau de jeu
 
-  //A SUPPRIMER
+  //TODO A SUPPRIMER
   player = 1; // Forcer le premier joueur pour les test
 
-  //Liste des equipe
-  Team red = {31, 1, "Les tigres"};
-  Team blue = {34, 2, "Les pieuvres"};
+  //Liste des equipes -------------------
+  Team red;
+  red.numEquip = 1;
+  red.color = config.colorTeam1;
+  strcpy(red.name, config.nameTeam1);
+  Team blue;
+  blue.numEquip = 2;
+  blue.color = config.colorTeam2;
+  strcpy(blue.name, config.nameTeam2);
+  //--------------------------------------
 
   initMap(map);
   initPiece(map, &red, &blue);
@@ -72,7 +81,7 @@ int main(int argc, char const *argv[]) {
     int oldCoor[2] = {0,0}; //Coordonnees de la derniere case
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
-    printMap(map, squareColor);
+    printMap(map, config.squareColor);
 
     //On affiche le joueur actif
     printf("Joueur %d\n", player);
@@ -110,7 +119,7 @@ int main(int argc, char const *argv[]) {
           sautTotal++;
         }
         move(&map[x][y], &map[x1][y1], x1, y1);
-        printMap(map, squareColor);
+        printMap(map, config.squareColor);
         //----------------------------------------------------------
 
         oldCoor[0] = x;
@@ -158,7 +167,7 @@ int main(int argc, char const *argv[]) {
                 //----------------
               }
             }
-            printMap(map, squareColor);
+            printMap(map, config.squareColor);
 
             oldCoor[0] = x;
             oldCoor[1] = y;
