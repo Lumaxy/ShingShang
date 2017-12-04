@@ -302,13 +302,13 @@ void initPiece(Square map[][TAILLE], Team *red, Team *blue){
       map[x][y].isFill = 1;
     }
   }
-  Piece p = {1, 4, 1, red};
+  Piece p = {1, 4, 3, red};
   map[1][4].piece = p;
   map[1][4].isFill = 1;
 
   p.x = 2;
   p.y = 4;
-  p.type = 1;
+  p.type = 3;
   p.team = blue;
   map[2][4].piece = p;
   map[2][4].isFill = 1;
@@ -318,6 +318,11 @@ void initPiece(Square map[][TAILLE], Team *red, Team *blue){
   map[4][4].piece = p;
   map[4][4].isFill = 1;
   p.x = 6;
+  p.y = 4;
+  p.team = blue;
+  map[6][4].piece = p;
+  map[6][4].isFill = 1;
+  p.x = 8;
   p.y = 4;
   p.team = blue;
   map[6][4].piece = p;
@@ -336,9 +341,24 @@ void move(Square *s1, Square *s2, int x, int y){
   s1->isFill = 0;
 }
 
-void testWin(int *isplaying, Square map[][TAILLE]){
+void testWin(int *isPlaying, Square map[][TAILLE]){
+  //Portail rempli par un dragon de sa couleur ?
+  int team = 1;
+  int x, y;
+  for(y = 1; y < 9; y+=7){
+    team++;
+    for(x = 4; x <= 5; x++){
+      if(map[x][y].isFill == 1){
+        if(map[x][y].piece.type == 3){
+          if(map[x][y].piece.team->numEquip != team){
+            *isPlaying = 0;
+            printf("Victoire de l'équipe %s\n", map[x][y].piece.team->name);
+          }
+        }
+      }
 
-
+    }
+  }
 
 }
 

@@ -48,7 +48,8 @@ int main(int argc, char const *argv[]) {
   char msg[50];
   msg[0] = '\0';
   int msgColor = 31;
-  int nbDrag = 4;
+  int nbDragRed = 2;
+  int nbDragBlue = 2;
 
   Square map[TAILLE][TAILLE]; // Plateau de jeu
 
@@ -56,14 +57,14 @@ int main(int argc, char const *argv[]) {
   player = 1; // Forcer le premier joueur pour les test
 
   //Liste des equipe
-  Team red = {31, 1};
-  Team blue = {34, 2};
+  Team red = {31, 1, "Les tigres"};
+  Team blue = {34, 2, "Les pieuvres"};
 
   initMap(map);
   initPiece(map, &red, &blue);
 
   //Chaque boucle correspond a un tour.
-  while(isPlaying && nbDrag > 0){
+  while(isPlaying && nbDragRed > 0 && nbDragBlue > 0){
     int x,y; //Coordonnees actuelle
     int x1,y1; //Coordonnees visees
     int oldCoor[2] = {0,0}; //Coordonnees de la derniere case
@@ -107,9 +108,6 @@ int main(int argc, char const *argv[]) {
           sautTotal++;
         }
         move(&map[x][y], &map[x1][y1], x1, y1);
-        if(map[(x+x1)/2][(y+y1)/2].piece.type == 3){
-          nbDrag--;
-        }
         printMap(map, squareColor);
         //----------------------------------------------------------
 
@@ -146,6 +144,16 @@ int main(int argc, char const *argv[]) {
               //Alors on supprime le pion de la case au milieu Si le pion est de l'equipe adverse
               if(map[(x+x1)/2][(y+y1)/2].piece.team->numEquip != player){
                 map[(x+x1)/2][(y+y1)/2].isFill = 0;
+
+                //saut d'un dragon?
+                if(map[(x+x1)/2][(y+y1)/2].piece.type == 3){
+                  if(map[(x+x1)/2][(y+y1)/2].piece.team->numEquip == 1){
+                    nbDragRed--;
+                  }else{
+                    nbDragBlue--;
+                  }
+                }
+                //----------------
               }
             }
             printMap(map, squareColor);
@@ -177,6 +185,20 @@ int main(int argc, char const *argv[]) {
       msgColor = 31;
       strcpy(msg,"Mauvais pion");
     }
+  }
+  char victoryName[255];
+  if(isPlaying != 0){
+    if(nbDragRed == 0){
+      couleur(blue.color);
+      strcpy(victoryName, blue.name);
+    }else{
+      couleur(red.color);
+      strcpy(victoryName, blue.name);
+    }
+
+    printf("Victoire de l'équipe ");
+    printf("%s\n", victoryName);
+    couleur(0);
   }
 
   return 0;

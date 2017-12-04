@@ -6,6 +6,7 @@ typedef struct Team Team;
 struct Team{
   int color;
   int numEquip;
+  char name[255];
 };
 
 typedef struct Piece Piece;
