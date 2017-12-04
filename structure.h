@@ -27,4 +27,12 @@ struct Square{
   int isFill;
 };
 
+typedef struct Config Config;
+struct Config{
+  char nameTeam1[255];
+  int colorTeam1;
+  char nameTeam2[255];
+  int colorTeam2;
+  int squareColor;
+};
 #endif
