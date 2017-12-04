@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "structure.h"
 #include "io.h"
 
 int loadConfig(Config *config){
@@ -8,8 +9,8 @@ int loadConfig(Config *config){
   char *mode = "r";
   char filename[255] = "config";
   char property[255];
-
   char c;
+
   file = fopen(filename, mode);
   if(file == NULL){
     fprintf(stderr, "Pas de fichier ou pas les droits.\n");
@@ -19,34 +20,47 @@ int loadConfig(Config *config){
     fprintf(file, "%s = %s\n", "nameTeam2", "Les pieuvres");
     fprintf(file, "%s = %d\n", "colorTeam2", 34);
     fprintf(file, "%s = %d\n", "squareColor", 33);
+    fprintf(file, "%s = %d\n", "squareChar", '0');
+
     fclose(file);
     printf("Fichier de sauvegarde créé.\n");
-    return 1;
-  }else{
-    while(fscanf(file, "%s = ", property) != EOF){
-      char value[255];
-      int index = 0;
-      do {
-        fscanf(file,"%c", &c);
-        if(c != '\n'){
-          value[index] = c;
-          index++;
-        }else{
-          value[index] = '\0';
-        }
-      } while(c != '\n');
+    file = fopen(filename, mode);
+  }
+  while(fscanf(file, "%s = ", property) != EOF){
+    char value[255];
+    int index = 0;
+    int squareChar;
 
-      if(strcmp(property,"nameTeam1") == 0){
-        strcpy(config->nameTeam1,value);
-      }else if(strcmp(property,"colorTeam1") == 0){
-        config->colorTeam1 = atoi(value);
-      }else if(strcmp(property,"nameTeam2") == 0){
-        strcpy(config->nameTeam2,value);
-      }else if(strcmp(property,"colorTeam2") == 0){
-        config->colorTeam2 = atoi(value);
-      }else if(strcmp(property, "squareColor") == 0){
-        config->squareColor = atoi(value);
+    do {
+      fscanf(file,"%c", &c);
+      if(strcmp(property, "squareChar") == 0 && index == 0){
+        squareChar = ((int)c-48)*10;// - 48 pour la conversion ascii en vrai nombre
+        printf("squareChar %d/%d/%c/%d\n", squareChar, (int)c, c, ((int)c-48)*10);
+      }else if(strcmp(property, "squareChar") == 0&& index == 1){
+        squareChar+= ((int)c-48 );
+        printf("squareChar %d\n", squareChar);
       }
+
+      if(c != '\n'){
+        value[index] = c;
+        index++;
+      }else {
+        value[index] = '\0';
+      }
+    } while(c != '\n');
+
+    if(strcmp(property,"nameTeam1") == 0){
+      strcpy(config->nameTeam1,value);
+    }else if(strcmp(property,"colorTeam1") == 0){
+      config->colorTeam1 = atoi(value);
+    }else if(strcmp(property,"nameTeam2") == 0){
+      strcpy(config->nameTeam2, value);
+    }else if(strcmp(property,"colorTeam2") == 0){
+      config->colorTeam2 = atoi(value);
+    }else if(strcmp(property, "squareColor") == 0){
+      config->squareColor = atoi(value);
+    }else if(strcmp(property, "squareChar") == 0 && index == 2){
+      config->squareChar = (char)squareChar;
     }
   }
   fclose(file);
@@ -68,6 +82,7 @@ void saveConfig(Config config){
     fprintf(file, "%s = %s\n", "nameTeam2", config.nameTeam2);
     fprintf(file, "%s = %d\n", "colorTeam2", config.colorTeam2);
     fprintf(file, "%s = %d\n", "squareColor", config.squareColor);
+    fprintf(file, "%s = %d\n", "squareChar", config.squareChar);
   }
 }
 

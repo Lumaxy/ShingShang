@@ -44,6 +44,7 @@ int main(int argc, char const *argv[]) {
   //Initialisation des variables ---------------------------------
   Config config;
   loadConfig(&config);
+  printf("Load du type ede case ; |%c|%d|\n", config.squareChar, config.squareChar);
   srand(time(NULL));
   int isPlaying = 1; //tant que personne ne gagne, isPlaying = 1
   int player = (rand()% 2) + 1; // Premier joueur a jouer
@@ -81,7 +82,7 @@ int main(int argc, char const *argv[]) {
     int oldCoor[2] = {0,0}; //Coordonnees de la derniere case
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
-    printMap(map, config.squareColor);
+    printMap(map, config);
 
     //On affiche le joueur actif
     printf("Joueur %d\n", player);
@@ -119,7 +120,7 @@ int main(int argc, char const *argv[]) {
           sautTotal++;
         }
         move(&map[x][y], &map[x1][y1], x1, y1);
-        printMap(map, config.squareColor);
+        printMap(map, config);
         //----------------------------------------------------------
 
         oldCoor[0] = x;
@@ -167,7 +168,7 @@ int main(int argc, char const *argv[]) {
                 //----------------
               }
             }
-            printMap(map, config.squareColor);
+            printMap(map, config);
 
             oldCoor[0] = x;
             oldCoor[1] = y;

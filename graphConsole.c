@@ -76,7 +76,7 @@ void finLigne(){
 
 
 
-void printMap(Square map[][TAILLE], int squareColor){
+void printMap(Square map[][TAILLE], Config config){
   int x, y;
 
   clear();
@@ -113,8 +113,9 @@ void printMap(Square map[][TAILLE], int squareColor){
             printf("D");
           }
         }else{
-          couleur(squareColor);
-          printf("0");
+          couleur(config.squareColor);
+          // char sqr = config.squareChar;
+          printf("%c",config.squareChar);
         }
         break;
         case 2:
@@ -129,7 +130,7 @@ void printMap(Square map[][TAILLE], int squareColor){
             printf("D");
           }
         }else{
-          couleur(31);
+          couleur(config.colorTeam1);
           printf("P");
         }
         break;
@@ -145,7 +146,7 @@ void printMap(Square map[][TAILLE], int squareColor){
             printf("D");
           }
         }else{
-          couleur(34);
+          couleur(config.colorTeam2);
           printf("P");
         }
         break;

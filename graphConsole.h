@@ -3,7 +3,7 @@
 #define TAILLE 10
 
 //Fonction Graphique
-void printMap(Square map[][TAILLE], int squareColor);
+void printMap(Square map[][TAILLE], Config config);
 void clear();
 void centrer();
 void ligne();
