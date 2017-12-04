@@ -14,6 +14,7 @@
 #include "graphConsole.h"
 #include "moteur.h"
 #include "io.h"
+#include "menu.h"
 
 //Random
 #include <time.h>
@@ -44,7 +45,6 @@ int main(int argc, char const *argv[]) {
   //Initialisation des variables ---------------------------------
   Config config;
   loadConfig(&config);
-  printf("Load du type ede case ; |%c|%d|\n", config.squareChar, config.squareChar);
   srand(time(NULL));
   int isPlaying = 1; //tant que personne ne gagne, isPlaying = 1
   int player = (rand()% 2) + 1; // Premier joueur a jouer
@@ -55,6 +55,8 @@ int main(int argc, char const *argv[]) {
   int nbDragRed = 2;
   int nbDragBlue = 2;
   //-----------------------------------------------------------------
+  //TODO Menu pour choisir console / sdl / config
+
 
   Square map[TAILLE][TAILLE]; // Plateau de jeu
 
@@ -75,6 +77,12 @@ int main(int argc, char const *argv[]) {
   initMap(map);
   initPiece(map, &red, &blue);
 
+//   int res;
+// do {
+//   printMap(map, config);
+//
+// } while(res == 0);
+
   //Chaque boucle correspond a un tour.
   while(isPlaying && nbDragRed > 0 && nbDragBlue > 0){
     int x,y; //Coordonnees actuelle
@@ -83,6 +91,7 @@ int main(int argc, char const *argv[]) {
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
     printMap(map, config);
+    menu();
 
     //On affiche le joueur actif
     printf("Joueur %d\n", player);

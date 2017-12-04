@@ -3,8 +3,8 @@
 #include "graphConsole.h"
 #include <unistd.h>
 
-#ifdef __unix__                    /* __unix__ is usually defined by compilers targeting Unix systems */
-
+/* ------------------------------------------ LINUX -------------------------------------*/
+#ifdef __unix__
 #include <stdlib.h>
 #include <string.h>
 
@@ -15,6 +15,11 @@ int getWidth()  {
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   return w.ws_col;
+}
+int getHeight()  {
+  struct winsize w;
+  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+  return w.ws_row;
 }
 void couleur(int couleur){
   printf("\033[%dm", couleur);
@@ -32,7 +37,9 @@ void ligne(){
   }
   couleur(0);
 }
+/* --------------------------------------------------------------------------------------- */
 
+/* ------------------------------------- WINDOWS ----------------------------------------- */
 #elif defined(_WIN32) || defined(WIN32)     /* _Win32 is usually defined by compilers targeting 32 or   64 bit Windows systems */
 
 #include <windows.h>
@@ -44,10 +51,13 @@ int getWidth() {
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
   return csbi.srWindow.Right - csbi.srWindow.Left + 1;
 }
+
 void couleur(int couleur){}
 void clear(){}
 void ligne(){}
 #endif
+/* ---------------------------------------------------------------------------------------- */
+
 
 #define TAILLE 10
 
@@ -55,7 +65,6 @@ void ligne(){}
 void centrer(){
   int i;
   int espace = (getWidth() / 2) - (TAILLE);
-
   couleur(47);
   for(i = 0; i < espace; i++){
     printf(" ");
@@ -66,6 +75,10 @@ void centrer(){
 void finLigne(){
   int i;
   int espace = (getWidth() / 2) - (TAILLE + 4);
+
+  if(espace%2 == 0){
+    espace--;
+  }
 
   couleur(47);
   for(i = 0; i < espace+6; i++){
@@ -163,10 +176,3 @@ void printMap(Square map[][TAILLE], Config config){
   ligne();
   printf("\n");
 }
-/*
-int getWidth(){
-struct winsize w;
-ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-return w.ws_col;
-}
-*/

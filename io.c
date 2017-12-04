@@ -35,10 +35,8 @@ int loadConfig(Config *config){
       fscanf(file,"%c", &c);
       if(strcmp(property, "squareChar") == 0 && index == 0){
         squareChar = ((int)c-48)*10;// - 48 pour la conversion ascii en vrai nombre
-        printf("squareChar %d/%d/%c/%d\n", squareChar, (int)c, c, ((int)c-48)*10);
       }else if(strcmp(property, "squareChar") == 0&& index == 1){
         squareChar+= ((int)c-48 );
-        printf("squareChar %d\n", squareChar);
       }
 
       if(c != '\n'){

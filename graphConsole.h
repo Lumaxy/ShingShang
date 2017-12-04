@@ -13,5 +13,6 @@ void finLigne();
 void couleur();
 //retourne la taille x du terminal TODO Mettre en source
 int getWidth();
+int getHeight();
 
 #endif
