@@ -2,18 +2,18 @@
 ###################################
 # Nom du projet : ShingShang      #
 # Auteur : Maxence Morin          #
-# Version : v0.4                  #
+# Version : v1.0                  #
 ###################################
 */
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
-//structure
 #include "structure.h"
 #include "graphConsole.h"
 #include "moteur.h"
-#include <unistd.h>
+#include "io.h"
 
 //Random
 #include <time.h>
@@ -41,8 +41,9 @@ printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldC
 
 
 int main(int argc, char const *argv[]) {
+  Config config;
+  loadConfig(&config);
   srand(time(NULL));
-  int squareColor = 33;
   int isPlaying = 1; //tant que personne ne gagne, isPlaying = 1
   int player = (rand()% 2) + 1; // Premier joueur a jouer
   //Message indicatif pour le joueur
