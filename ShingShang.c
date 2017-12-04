@@ -34,8 +34,9 @@
 
 /*
 ###################DEBUG####################
+printf("Jump distance(p, x1, y1) : %d\n", distance(p, x1, y1));
 printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldCoor[0], oldCoor[1], x, y, x1, y1, resJump);
-
+############################################
 */
 
 

@@ -22,6 +22,6 @@ void testWin(int *isplaying, Square map[][TAILLE]);
 void initPiece(Square map[][TAILLE], Team *red, Team *blue);
 void initMap(Square map[][TAILLE]);
 
-void clearBuffer();
+int clearBuffer();
 
 #endif
