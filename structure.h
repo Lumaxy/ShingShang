@@ -35,5 +35,6 @@ struct Config{
   int colorTeam2;
   int squareColor;
   char squareChar;
+  int frameColor;
 };
 #endif

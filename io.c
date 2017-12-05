@@ -21,6 +21,8 @@ int loadConfig(Config *config){
     fprintf(file, "%s = %d\n", "colorTeam2", 34);
     fprintf(file, "%s = %d\n", "squareColor", 33);
     fprintf(file, "%s = %d\n", "squareChar", '0');
+    fprintf(file, "%s = %d\n", "spaceColor", 47);
+
 
     fclose(file);
     printf("Fichier de sauvegarde créé.\n");
@@ -59,6 +61,8 @@ int loadConfig(Config *config){
       config->squareColor = atoi(value);
     }else if(strcmp(property, "squareChar") == 0 && index == 2){
       config->squareChar = (char)squareChar;
+    }else if(strcmp(property, "frameColor") == 0){
+      config->frameColor = atoi(value);
     }
   }
   fclose(file);

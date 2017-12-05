@@ -27,11 +27,11 @@ void couleur(int couleur){
 void clear() {
   printf("\033[H\033[2J");
 }
-void ligne(){
+void ligne(Config config){
   int i;
   int espace = getWidth();
 
-  couleur(47);
+  couleur(config.frameColor);
   for(i = 0; i < espace; i++){
     printf(" ");
   }
@@ -53,8 +53,8 @@ int getWidth() {
 }
 
 void couleur(int couleur){}
-void clear(){}
-void ligne(){}
+void clear(Config config){}
+void ligne(config config){}
 #endif
 /* ---------------------------------------------------------------------------------------- */
 
@@ -62,17 +62,17 @@ void ligne(){}
 #define TAILLE 10
 
 //Fonction graphique
-void centrer(){
+void centrer(Config config){
   int i;
   int espace = (getWidth() / 2) - (TAILLE);
-  couleur(47);
+  couleur(config.frameColor);
   for(i = 0; i < espace; i++){
     printf(" ");
   }
   couleur(0);
 }
 
-void finLigne(){
+void finLigne(Config config){
   int i;
   int espace = (getWidth() / 2) - (TAILLE + 4);
 
@@ -80,7 +80,7 @@ void finLigne(){
     espace--;
   }
 
-  couleur(47);
+  couleur(config.frameColor);
   for(i = 0; i < espace+6; i++){
     printf(" ");
   }
@@ -94,12 +94,12 @@ void printMap(Square map[][TAILLE], Config config){
 
   clear();
 
-  ligne();
-  ligne();
+  ligne(config);
+  ligne(config);
 
   //--------------------Parcous tableau---------------------
   for(y = 0; y < TAILLE; y++){
-    centrer();
+    centrer(config);
     for(x = 0; x < TAILLE; x++){
       if(x != 0){
         printf(" ");
@@ -108,7 +108,7 @@ void printMap(Square map[][TAILLE], Config config){
       switch(map[x][y].type){
         //Hors plateau
         case -1:
-        couleur(47);
+        couleur(config.frameColor);
         printf(" ");
         break;
         //Normal
@@ -166,13 +166,13 @@ void printMap(Square map[][TAILLE], Config config){
       }
       couleur(0);
     }
-    finLigne();
+    finLigne(config);
     printf("\n");
   }
   // ---------------------------------------------------
 
   //ligne du bas
-  ligne();
-  ligne();
+  ligne(config);
+  ligne(config);
   printf("\n");
 }

@@ -5,9 +5,9 @@
 //Fonction Graphique
 void printMap(Square map[][TAILLE], Config config);
 void clear();
-void centrer();
-void ligne();
-void finLigne();
+void centrer(Config config);
+void ligne(Config config);
+void finLigne(Config config);
 
 //TODO Source openclassroom
 void couleur();
