@@ -1,0 +1,3 @@
+#! /bin/bash
+clear
+gcc -lm -Wall *.c -o Shing

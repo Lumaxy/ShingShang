@@ -3,7 +3,6 @@
 #include <string.h>
 #include "structure.h"
 #include "io.h"
-#define TAILLE 10
 
 int loadConfig(Config *config){
   FILE *file;
@@ -89,7 +88,7 @@ void saveConfig(Config config){
   }
 }
 
-int loadGame(int tab[][TAILLE], int size){
+int loadGame(int tab[][2], int size){
   FILE *file;
   char *mode = "r";
   char filename[255] = "save";
@@ -119,26 +118,18 @@ int loadGame(int tab[][TAILLE], int size){
   }
 }
 
-void saveGame(int tab[][TAILLE]){
-  FILE *map_type;
-  FILE *map_isFill;
-  FILE *map_piece;
-  FILE *pieces_type;
-  FILE *piece_numEquip;
-  FILE *data;
-
+void saveGame(int tab[][2], int size){
+  FILE *file;
   char *mode = "w+";
-  char map_type_name[255] = "type";
-  char map_isFill_name[255] = "isFill";
-
+  char filename[255] = "save";
   int x, y;
 
   file = fopen(filename, mode);
   if(file == NULL){
     fprintf(stderr, "Error.\n");
   }else{
-    for(x = 0; x < 10; x++){
-      for(y = 0; y < 10; y++){
+    for(x = 0; x < size; x++){
+      for(y = 0; y < size; y++){
         fprintf(file, "%d", tab[x][y]);
         if(y != size - 1){
           fprintf(file, ":");
