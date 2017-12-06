@@ -98,33 +98,45 @@ void saveConfig(Config config){
 }
 
 int loadGame(Square tab[][TAILLE]){
-  // FILE *file;
-  // char *mode = "r";
-  // char filename[255] = "save";
-  // int tmp;
-  // char c;
-  // int x = 0, y = 0;
-  //
-  // file = fopen(filename, mode);
-  // if(file == NULL){
-  //   fprintf(stderr, "Pas de fichier ou pas les droits.\n");
-  //   file = fopen(filename, "w+");
-  //   fclose(file);
-  //   printf("Fichier de sauvegarde créé.\n");
-  //   return 1;
-  // }else{
-  //   while(fscanf(file, "%d%c", &tmp, &c) != EOF){
-  //     tab[x][y] = tmp;
-  //     if(c == ':'){
-  //       x++;
-  //     }else{
-  //       y++;
-  //       x=0;
-  //     }
-  //   }
-  //   fclose(file);
-  return 0;
-  // }
+  FILE *map_type;
+  FILE *map_isFill;
+
+  FILE *pieces_type;
+  FILE *pieces_numEquip;
+
+  char *mode = "r";
+  char map_type_name[255] = "save/Map/type";
+  char map_isFill_name[255] = "save/Map/isFill";
+
+  char pieces_numEquip_name[255] = "save/Pieces/numEquip";
+  char pieces_type_name[255] = "save/Pieces/type";
+
+  map_type = fopen(map_type_name, mode);
+  map_isFill = fopen(map_isFill_name, mode);
+
+  pieces_numEquip = fopen(pieces_numEquip_name, mode);
+  pieces_type = fopen(pieces_type_name, mode);
+
+  int x = 0, y = 0;
+
+  if(map_type == NULL){
+    fprintf(stderr, "Pas de fichier de sauvegarde : map_type.\n");
+    file = fopen(filename, "w+");
+    fclose(file);
+    printf("Fichier de sauvegarde créé.\n");
+  }else{
+    while(fscanf(file, "%d:", &tmp, &c) != EOF){
+      tab[x][y] = tmp;
+      if(c == ':'){
+        x++;
+      }else{
+        y++;
+        x=0;
+      }
+    }
+    fclose(file);
+    return 0;
+  }
 }
 
 void saveGame(Square tab[][TAILLE]){
@@ -136,31 +148,10 @@ void saveGame(Square tab[][TAILLE]){
 
   // FILE *data;
 
-
   //https://stackoverflow.com/questions/7430248/creating-a-new-directory-in-c
-
-
-  //   struct stat stSave = {0};
-  //
-  //   if (stat("/some/directory", &st) == -1) {
-  //       mkdir("/some/directory", 0700);
-  //   }
-  //
-  // struct stat st = {0};
-  //
-  // if (stat("/some/directory", &st) == -1) {
-  //     mkdir("/some/directory", 0700);
-  // }
-  //
-  // struct stat st = {0};
-  //
-  // if (stat("/some/directory", &st) == -1) {
-  //     mkdir("/some/directory", 0700);
-  // }
   mkdir("save", 0700);
   mkdir("save/Map", 0700);
   mkdir("save/Pieces", 0700);
-
 
 
   char *mode = "w+";
@@ -268,6 +259,4 @@ void saveGame(Square tab[][TAILLE]){
     fclose(pieces_numEquip);
     printf("Saving pieces_numEquip : OK\n");
   }
-
-
 }
