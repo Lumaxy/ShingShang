@@ -88,6 +88,7 @@ int main(int argc, char const *argv[]) {
 
   initMap(map);
   initPiece(map, &red, &blue);
+  saveGame(map);
 
 //   int res;
 // do {
