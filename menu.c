@@ -6,9 +6,10 @@
 int menu(){
   printf("  Shing - Shang\n");
   printf("-------Menu-------\n");
-  printf("1 - Jeux console\n");
-  printf("2 - Jeux graphique\n");
-  printf("3 - Configuration\n");
+  printf("1 - Nouvelle partie\n");
+  printf("2 - Reprendre la partie\n");
+  printf("3 - Jeux graphique\n");
+  printf("4 - Configuration\n");
   char xChar;
   int nbAfter = 0;
   int x = -1;

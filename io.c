@@ -97,7 +97,7 @@ void saveConfig(Config config){
   }
 }
 
-int loadGame(Square tab[][TAILLE]){
+int loadGame(Square tab[][TAILLE], Team *red, Team *blue){
   FILE *map_type;
   FILE *map_isFill;
 
@@ -119,14 +119,30 @@ int loadGame(Square tab[][TAILLE]){
 
   int x = 0, y = 0;
 
-  if(map_type == NULL){
-    fprintf(stderr, "Pas de fichier de sauvegarde : map_type.\n");
-    file = fopen(filename, "w+");
-    fclose(file);
-    printf("Fichier de sauvegarde créé.\n");
+  if(map_type == NULL || map_isFill == NULL || pieces_numEquip == NULL || pieces_type == NULL){
+    fprintf(stderr, "Erreur de lecture de sauvegarde. Un fichier est manquant.\n");
+    //TODO creer le fichier manquant
+    // printf("Fichier de sauvegarde créé.\n");
+    return 1;
   }else{
-    while(fscanf(file, "%d:", &tmp, &c) != EOF){
-      tab[x][y] = tmp;
+    int valMapType;
+    int valMapIsFill;
+    int valPieceNumEquip;
+    int valPieceType;
+    char c, tmp;
+    while(fscanf(map_type, "%d%c", &valMapType, &c) != EOF){
+      fscanf(map_isFill, "%d%c", &valMapIsFill, &tmp);
+      fscanf(pieces_numEquip, "%d%c", &valPieceNumEquip, &tmp);
+      fscanf(pieces_type, "%d%c", &valPieceType, &tmp);
+      tab[x][y].type = valMapType;
+      tab[x][y].isFill = valMapIsFill;
+      if(valMapIsFill == 1){
+        Piece p = {x, y, valPieceType, blue};
+        if(valPieceNumEquip == 1){
+          p.team = red;
+        }
+        tab[x][y].piece = p;
+      }
       if(c == ':'){
         x++;
       }else{
@@ -134,7 +150,10 @@ int loadGame(Square tab[][TAILLE]){
         x=0;
       }
     }
-    fclose(file);
+    fclose(map_type);
+    fclose(map_isFill);
+    fclose(pieces_numEquip);
+    fclose(pieces_type);
     return 0;
   }
 }
@@ -179,10 +198,10 @@ void saveGame(Square tab[][TAILLE]){
     fprintf(stderr, "Error while saving map_type\n");
     couleur(0);
   }else{
-    for(x = 0; x < TAILLE; x++){
-      for(y = 0; y < TAILLE; y++){
+    for(y = 0; y < TAILLE; y++){
+      for(x = 0; x < TAILLE; x++){
         fprintf(map_type, "%d", tab[x][y].type);
-        if(y != TAILLE - 1){
+        if(x != TAILLE - 1){
           fprintf(map_type, ":");
         }
       }
@@ -198,10 +217,10 @@ void saveGame(Square tab[][TAILLE]){
     fprintf(stderr, "Error while saving map_isFill\n");
     couleur(0);
   }else{
-    for(x = 0; x < TAILLE; x++){
-      for(y = 0; y < TAILLE; y++){
+    for(y = 0; y < TAILLE; y++){
+      for(x = 0; x < TAILLE; x++){
         fprintf(map_isFill, "%d", tab[x][y].isFill);
-        if(y != TAILLE - 1){
+        if(x != TAILLE - 1){
           fprintf(map_isFill, ":");
         }
       }
@@ -218,14 +237,14 @@ void saveGame(Square tab[][TAILLE]){
     fprintf(stderr, "Error while saving pieces_type\n");
     couleur(0);
   }else{
-    for(x = 0; x < TAILLE; x++){
-      for(y = 0; y < TAILLE; y++){
+    for(y = 0; y < TAILLE; y++){
+      for(x = 0; x < TAILLE; x++){
         if(tab[x][y].isFill == 1){
           fprintf(pieces_type, "%d", tab[x][y].piece.type);
         }else{
           fprintf(pieces_type, "0");
         }
-        if(y != TAILLE - 1){
+        if(x != TAILLE - 1){
           fprintf(pieces_type, ":");
         }
       }
@@ -242,15 +261,14 @@ void saveGame(Square tab[][TAILLE]){
     fprintf(stderr, "Error while saving pieces_numEquip\n");
     couleur(0);
   }else{
-    for(x = 0; x < TAILLE; x++){
-      for(y = 0; y < TAILLE; y++){
+    for(y = 0; y < TAILLE; y++){
+      for(x = 0; x < TAILLE; x++){
         if(tab[x][y].isFill == 1){
           fprintf(pieces_numEquip, "%d", tab[x][y].piece.team->numEquip);
         }else{
           fprintf(pieces_numEquip, "0");
-
         }
-        if(y != TAILLE - 1){
+        if(x != TAILLE - 1){
           fprintf(pieces_numEquip, ":");
         }
       }

@@ -53,6 +53,11 @@ printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldC
 
 
 int main(int argc, char const *argv[]) {
+
+  //TODO Menu pour choisir console / sdl / config
+  //TODO faire de ne pas terminer sur un portail a la fin d'un tour
+  //TODO changer de bushi si saut d'un adversaire
+
   //Initialisation des variables ---------------------------------
   Config config;
   loadConfig(&config);
@@ -66,16 +71,8 @@ int main(int argc, char const *argv[]) {
   int nbDragRed = 2;
   int nbDragBlue = 2;
   //-----------------------------------------------------------------
-  //TODO Menu pour choisir console / sdl / config
-  menu();
 
-
-  Square map[TAILLE][TAILLE]; // Plateau de jeu
-
-  //TODO A SUPPRIMER
-  player = 1; // Forcer le premier joueur pour les test
-
-  //Liste des equipes -------------------
+  //Liste des équipes -------------------
   Team red;
   red.numEquip = 1;
   red.color = config.colorTeam1;
@@ -86,15 +83,29 @@ int main(int argc, char const *argv[]) {
   strcpy(blue.name, config.nameTeam2);
   //--------------------------------------
 
-  initMap(map);
-  initPiece(map, &red, &blue);
-  saveGame(map);
+  Square map[TAILLE][TAILLE]; // Plateau de jeu
+  switch(menu()){
+    case 1:
+    initMap(map);
+    initPiece(map, &red, &blue);
+    saveGame(map);
+    break;
 
-//   int res;
-// do {
-//   printMap(map, config);
-//
-// } while(res == 0);
+    case 2:
+    loadGame(map, &red, &blue);
+    break;
+
+    case 3:
+
+    break;
+
+    case 4:
+
+    break;
+  }
+
+  //TODO A SUPPRIMER
+  player = 1; // Forcer le premier joueur pour les test
 
   //Chaque boucle correspond a un tour.
   while(isPlaying && nbDragRed > 0 && nbDragBlue > 0){

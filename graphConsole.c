@@ -87,8 +87,6 @@ void finLigne(Config config){
   couleur(0);
 }
 
-
-
 void printMap(Square map[][TAILLE], Config config){
   int x, y;
 
