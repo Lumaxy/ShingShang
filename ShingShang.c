@@ -41,7 +41,6 @@
 46 Cyan
 47 Blanc
 48 transparant
-
 */
 
 /*
@@ -109,9 +108,9 @@ int main(int argc, char const *argv[]) {
 
   //Chaque boucle correspond a un tour.
   while(isPlaying && nbDragRed > 0 && nbDragBlue > 0){
-    int x,y; //Coordonnees actuelle
-    int x1,y1; //Coordonnees visees
-    int oldCoor[2] = {0,0}; //Coordonnees de la derniere case
+    Coordonnees position; //Coordonnees actuelle
+    Coordonnees target; //Coordonnees visees
+    Coordonnees old = {0,0}; //Coordonnees de la derniere case
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
     printMap(map, config);
@@ -125,13 +124,13 @@ int main(int argc, char const *argv[]) {
     couleur(0);
 
     //Obtention Coordonnée du pion à bouger
-    getCoor(&x, &y);
+    getCoor(&position);
 
     //Si le test est 1 c'est un de ses pion, il peux donc le bouger
-    if(testCoor(x, y, map, player) == 1){
+    if(testCoor(position, map, player) == 1){
 
       //Test du nombre de coup possible (saut + move)
-      if(numJump(x, y, oldCoor, map)+numMove(x, y, map) >= 1){
+      if(numJump(position, old, map)+numMove(position, map) >= 1){
         couleur(32);
         printf("Vers quel point souhaitez vous le bouger ?\n");
         couleur(0);
@@ -140,72 +139,63 @@ int main(int argc, char const *argv[]) {
         int resMove = 0, resJump = 0;
         do{
           msg[0] = '\0';
-          getCoor(&x1, &y1);
+          getCoor(&target);
           //On test si la case pointer est bien libre et s'il peux y acceder
-          resMove = testMove(x, y, x1, y1, map);
+          resMove = testMove(position, target, map);
           //Permet d'eviter que le pion apres avoir bouger puisse sauter
           if(resMove == 0){
-            resJump = testJump(x, y, x1, y1,oldCoor, map);
+            resJump = testJump(position, target, old, map);
           }
         }while(resMove != 1 && resJump != 1);
         if (resJump == 1) {
           sautTotal++;
         }
-        move(&map[x][y], &map[x1][y1], x1, y1);
+        move(map, target, &position, &old);
         printMap(map, config);
         //----------------------------------------------------------
 
-        oldCoor[0] = x;
-        oldCoor[1] = y;
-        x = x1;
-        y = y1;
-
         //--------- Suite de saut ---------------------------------------
         int again = 0;
-        while(numJump(x, y, oldCoor, map) >= 1 && again == 0 && resMove == 0){
-          printf("Souhaitez vous encore sauter ? O/N (%d pos)\n", numJump(x, y, oldCoor, map));
+        while(numJump(position, old, map) >= 1 && again == 0 && resMove == 0){
+          printf("Souhaitez vous encore sauter ? O/N (%d pos)\n", numJump(position, old, map));
 
-          //Obtention de la reponse du joueur
+          //Obtention de la reponse du joueur--
           char rep;
           do{
             scanf("%c", &rep);
           }while(rep != 'O' && rep != 'N' && rep != 'o' && rep != 'n');
           clearBuffer();
-          //----------------------------------
+          //-----------------------------------
 
           if(rep == 'O'){
             do{
               msg[0] = '\0';
               //Recup des nouvelle Coordonnees
-              getCoor(&x1, &y1);
-              resJump = testJump(x, y, x1, y1, oldCoor, map);
-              printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldCoor[0], oldCoor[1], x, y, x1, y1, resJump);
-            }while(resJump != 1 || (x1 == oldCoor[0] && y1 == oldCoor[1]));
+              getCoor(&target);
+              resJump = testJump(position, target, old, map);
+            }while(resJump != 1 || (target.x == old.x && target.y == old.y));
             //Execution
-            move(&map[x][y], &map[x1][y1], x1, y1);
+            move(map, target, &position, &old);
             sautTotal++;
             if (sautTotal >= 2) {
               //Alors on supprime le pion de la case au milieu Si le pion est de l'equipe adverse
-              if(map[(x+x1)/2][(y+y1)/2].piece.team->numEquip != player){
-                map[(x+x1)/2][(y+y1)/2].isFill = 0;
+              if(map[(position.x + target.x) / 2][(position.y + target.y) / 2].piece.team->numEquip != player){
+                map[(position.x + target.x) / 2][(position.y + target.y) / 2].isFill = 0;
 
                 //saut d'un dragon?
-                if(map[(x+x1)/2][(y+y1)/2].piece.type == 3){
-                  if(map[(x+x1)/2][(y+y1)/2].piece.team->numEquip == 1){
+                if(map[(position.x + target.x) / 2][(position.y + target.y) / 2].piece.type == 3){
+                  if(map[(position.x + target.x) / 2][(position.y + target.y) / 2].piece.team->numEquip == 1){
                     nbDragRed--;
                   }else{
                     nbDragBlue--;
                   }
                 }
                 //----------------
+
+
               }
             }
             printMap(map, config);
-
-            oldCoor[0] = x;
-            oldCoor[1] = y;
-            x = x1;
-            y = y1;
 
           }else{
             again = 1;

@@ -6,11 +6,11 @@
 
 //Fonction Moteur
 
-void getCoor(int *x, int *y){
+void getCoor(Coordonnees *coor){
   char xChar, yChar;
   int nbCarAfter = 0;
-  *x = -1;
-  *y = -1;
+  coor->x = -1;
+  coor->y = -1;
   do{
     printf("Entrez x :\n");
     scanf("%c", &xChar);
@@ -18,13 +18,13 @@ void getCoor(int *x, int *y){
     nbCarAfter = clearBuffer();
 
     if((int)xChar >= 48 && (int)xChar <= 57 && nbCarAfter == 0){
-      *x = (int)xChar - 48;
+      coor->x = (int)xChar - 48;
     }else{
       couleur(31);
       printf("Format incorrect.\n");
       couleur(0);
     }
-  }while(*x < 0 || *x > 9);
+  }while(coor->x < 0 || coor->x > 9);
 
   do{
     printf("Entrez y :\n");
@@ -33,19 +33,18 @@ void getCoor(int *x, int *y){
     nbCarAfter = clearBuffer();
 
     if((int)yChar >= 48 && (int)yChar <= 57 && nbCarAfter == 0){
-      *y = (int)yChar - 48;
+      coor->y = (int)yChar - 48;
     }else{
       couleur(31);
       printf("Format incorrect.\n");
       couleur(0);
     }
-    printf("%d\n", *y);
-  }while(*y < 0 || *y > 9);
+  }while(coor->y < 0 || coor->y > 9);
 }
 
-int testCoor(int x, int y, Square map[][TAILLE], int player){
+int testCoor(Coordonnees position, Square map[][TAILLE], int player){
   int res = -1;
-  Square tmp = map[x][y];
+  Square tmp = map[position.x][position.y];
   //Case potable ?
   if(tmp.type == 0){
     //Case pleine ?
@@ -62,34 +61,34 @@ int testCoor(int x, int y, Square map[][TAILLE], int player){
   return res;
 }
 
-int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
+//Check si le deplacement es tautorise : 1 si oui, 0 sinon.
+int testMove(Coordonnees position, Coordonnees target, Square map[][TAILLE]){
   int res = 0;
   int tmp = 0; //Permet de ne pas repeter le test du coef directeur
 
-  if(map[x][y].isFill == 1){
-    Square caseVisee = map[x1][y1];
-    //Movement ?
+  if(map[position.x][position.y].isFill == 1){
+    Square caseVisee = map[target.x][target.y];
     //test du type de la map
     if(caseVisee.type == 0){
       //La case est elle occupé?
       if(caseVisee.isFill == 0){
         //Mouvement autoriser selon le pion?
-        Piece p1 = map[x][y].piece;
+        Piece p1 = map[position.x][position.y].piece;
         switch(p1.type){
           //Singe mouvement de deux case dans la meme direction
           case 1:
-          printf("distance(p, x1, y1) : %d\n", distance(p1, x1, y1));
-          if(distance(p1, x1, y1) == 2*2 && map[(x+x1)/2][(y+y1)/2].isFill == 0){
+          printf("distance : %d\n", distance(position, target));
+          if(distance(position, target) == 2*2 && map[(position.x + target.x) / 2][(position.y + target.y) / 2].isFill == 0){
             tmp = 1;
-          }else if(distance(p1, x1, y1) == 1){
+          }else if(distance(position, target) == 1){
             tmp = 1;
           }
           if(tmp == 1){
             // Direction. cas particulier de droite x = k
-            if(x1 == x){
+            if(target.x == position.x){
               res = 1;
             }else{
-              float coef = (y1 - y) / (x1 - x); //coef directeur
+              float coef = (target.y - position.y) / (target.x - position.x); //coef directeur
               if(abso(coef) == 1 || coef == 0){
                 res = 1;
               }
@@ -98,7 +97,7 @@ int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
           break;
           //Lion 1 case
           case 2:
-          if(distance(p1, x1, y1) == 1){
+          if(distance(position, target) == 1){
             res = 1;
           }
           break;
@@ -113,22 +112,20 @@ int testMove(int x, int y, int x1, int y1, Square map[][TAILLE]){
 
 //TODO: quand je choisis de nouveau la case il me change les coordonnées
 // et du coup ma case devient isFill == 0
-int testJump(int x, int y, int x1, int y1, int oldCoor[2], Square map[][TAILLE]){
+int testJump(Coordonnees position, Coordonnees target, Coordonnees old, Square map[][TAILLE]){
   int res = 0;
-  //Test Jump
-  Square center = map[x][y];
-  Piece p = center.piece;
+  // center = map[x][y];
+  Piece p = map[position.x][position.y].piece;
   //verif de la case visee
-  if(x1 >= 0 && y1 >= 0 && x1 <= 9 && y1 <= 9){
-    if(map[x1][y1].type >= 0){
+  if(target.x >= 0 && target.y >= 0 && target.x <= 9 && target.y <= 9){
+    if(map[target.x][target.y].type >= 0){
 
-      if(oldCoor[0] == x1 && oldCoor[1] == y){
+      if(old.x == target.x && old.y == target.y){
         printf("Impossible de faire retour\n");
       }else{
-        if(distance(p, x1, y1) == 2*2){
-          int xMoy = (x + x1) / 2;
-          int yMoy = (y + y1) / 2;
-
+        if(distance(position, target) == 2*2 || distance(position, target) == 8){
+          int xMoy = (position.x + target.x) / 2;
+          int yMoy = (position.y + target.y) / 2;
           Piece p2 = map[xMoy][yMoy].piece;
 
           if(p.type >= p2.type){
@@ -136,15 +133,6 @@ int testJump(int x, int y, int x1, int y1, int oldCoor[2], Square map[][TAILLE])
             res = 1;
           }
 
-        }else if(distance(p, x1, y1) == 8){
-          int xMoy = (x + x1) / 2;
-          int yMoy = (y + y1) / 2;
-          printf("%d//%d\n", xMoy, yMoy );
-          Piece p2 = map[xMoy][yMoy].piece;
-
-          if(p.type >= p2.type){
-            res = 1;
-          }
         }else{
           printf("La case n'est pas à la bonne distance de saut\n" );
         }
@@ -155,20 +143,19 @@ int testJump(int x, int y, int x1, int y1, int oldCoor[2], Square map[][TAILLE])
 }
 
 
-int numMove(int x, int y, Square map[][TAILLE]){
+int numMove(Coordonnees position, Square map[][TAILLE]){
   int res = 0;
   int i, j;
 
-  for(i = x -1; i <= x + 1; i++){
-    for(j = y -1; j <= y + 1; j++){
+  for(i = position.x - 1; i <= position.x + 1; i++){
+    for(j = position.y -1; j <= position.y + 1; j++){
       //On test si les nouvelles coordonnées ne débordent pas du tableau et differente du centre
       if(i >= 0 && i <= 9 && j >= 0 && j <= 9){
         //coord differente du centre
-        if(!(i == x && j == y)){
+        if(!(i == position.x && j == position.y)){
           Square tmp = map[i][j];
           //test du type de la map
           if(tmp.type >= 0){
-
             //La case est elle occupé?
             if(tmp.isFill == 0){
               res++;
@@ -181,37 +168,31 @@ int numMove(int x, int y, Square map[][TAILLE]){
   return res;
 }
 
-int numJump(int x, int y, int oldCoor[2], Square map[][TAILLE]){
+int numJump(Coordonnees position, Coordonnees old, Square map[][TAILLE]){
   int res = 0, i, j;
+  Square center = map[position.x][position.y];
 
-  Square center = map[x][y];
-
-  for(i = x -1; i <= x + 1; i++){
-    for(j = y -1; j <= y + 1; j++){
+  for(i = position.x -1; i <= position.x + 1; i++){
+    for(j = position.y -1; j <= position.y + 1; j++){
       //On test si les nouvelles coordonnées ne débordent pas du tableau et differente du centre
       if(i >= 0 && i <= 9 && j >= 0 && j <= 9){
         //coord differente du centre
-        if(!(i == x && j == y)){
+        if(!(i == position.x && j == position.y)){
           Square tmp = map[i][j];
-          //test du type de la map
-          if(tmp.type >= 0){
-            //La case est elle occupé?
-            if(tmp.isFill == 1){
-              Piece tmpP = tmp.piece;
-              //Le pion est il plus petit ou de meme taille ?
-              if(tmpP.type <= center.piece.type){
-                //test des coor opposer, si elle sont bien dsans la grille
-                int xA = (2*i)-x;
-                int yA = (2*j)-y;
-                if(xA >= 0 && xA <= 9 && yA >= 0 && yA <= 9  && !(xA == oldCoor[0] && yA == oldCoor[1])){
-
-                  // si possible
-                  if(map[xA][yA].type >= 0){
-
-                    // si vide
-                    if(map[xA][yA].isFill == 0){
-                      res++;
-                    }
+          //test du type de la case/ La case est elle occupé?
+          if(tmp.type >= 0 && tmp.isFill == 1){
+            Piece tmpP = tmp.piece;
+            //Le pion est il plus petit ou de meme taille ?
+            if(tmpP.type <= center.piece.type){
+              //test des coor opposer, si elle sont bien dsans la grille
+              int xA = (2*i)-position.x;
+              int yA = (2*j)-position.y;
+              if(xA >= 0 && xA <= 9 && yA >= 0 && yA <= 9  && !(xA == old.x && yA == old.y)){
+                // si possible
+                if(map[xA][yA].type >= 0){
+                  // si vide
+                  if(map[xA][yA].isFill == 0){
+                    res++;
                   }
                 }
               }
@@ -224,9 +205,9 @@ int numJump(int x, int y, int oldCoor[2], Square map[][TAILLE]){
   return res;
 }
 
-int distance(Piece p1, int x, int y){
+int distance(Coordonnees position,Coordonnees target){
   //Pour eviter la racine carre, je renvoie le res au carre.
-  return ((p1.x - x)*(p1.x - x) + (p1.y - y)*(p1.y - y));
+  return ((position.x - target.x)*(position.x - target.x) + (position.y - target.y)*(position.y - target.y));
 }
 
 float abso(float x){
@@ -314,15 +295,20 @@ void initPiece(Square map[][TAILLE], Team *red, Team *blue){
 }
 
 
-void move(Square *s1, Square *s2, int x, int y){
-  Piece p = s1->piece;
-  // map[x1][y1]
-  p.x = x;
-  p.y = y;
-  s2->piece = p;
-  s2->isFill = 1;
+void move(Square map[][TAILLE], Coordonnees target, Coordonnees *position, Coordonnees *old){
+  Piece p = map[position->x][position->y].piece; //Le pion a la position
+  p.x = target.x; //Nouvelle position
+  p.y = target.y;
 
-  s1->isFill = 0;
+  map[target.x][target.y].piece = p;
+  map[target.x][target.y].isFill = 1;
+  map[position->x][position->y].isFill = 0;
+
+  //Update des coord
+  old->x = position->x;
+  old->y = position->y;
+  position->x = target.x;
+  position->y = target.y;
 }
 
 void testWin(int *isPlaying, Square map[][TAILLE]){
@@ -340,10 +326,8 @@ void testWin(int *isPlaying, Square map[][TAILLE]){
           }
         }
       }
-
     }
   }
-
 }
 
 int clearBuffer(){

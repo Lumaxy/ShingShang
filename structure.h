@@ -37,4 +37,10 @@ struct Config{
   char squareChar;
   int frameColor;
 };
+
+typedef struct Coordonnees Coordonnees;
+struct Coordonnees{
+  int x;
+  int y;  
+};
 #endif
