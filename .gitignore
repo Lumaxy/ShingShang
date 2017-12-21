@@ -3,6 +3,6 @@ Shing.exe
 testio
 config
 save
-save/Map
-save/Pieces
+saveVictory
 test
+Local

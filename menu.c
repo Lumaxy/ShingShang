@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "structure.h"
 #include "graphConsole.h"
-#include "moteur.h"
+#include "moteur/moteur.h"
 
 int menu(){
   printf("  Shing - Shang\n");

@@ -3,6 +3,27 @@
 #include "graphConsole.h"
 #include <unistd.h>
 
+/*
+30 Noir
+31 Rouge
+32 Vert
+33 Jaune
+34 Bleu
+35 Magenta
+36 Cyan
+37 Blanc
+
+40 Gris
+42 Vert
+41 Rouge
+43 Jaune
+44 Bleu
+45 Magenta
+46 Cyan
+47 Blanc
+48 transparant
+*/
+
 /* ------------------------------------------ LINUX -------------------------------------*/
 #ifdef __unix__
 #include <stdlib.h>
