@@ -10,35 +10,35 @@ void getCoor(Coordonnees *coor){
   int nbCarAfter = 0;
   coor->x = -1;
   coor->y = -1;
-  do{
-    printf("Entrez x :\n");
-    scanf("%c", &xChar);
+    do{
+      printf("Entrez x :\n");
+      scanf("%c", &xChar);
 
-    nbCarAfter = clearBuffer();
+      nbCarAfter = clearBuffer();
 
-    if((int)xChar >= 48 && (int)xChar <= 57 && nbCarAfter == 0){
-      coor->x = (int)xChar - 48;
-    }else{
-      couleur(31);
-      printf("Format incorrect.\n");
-      couleur(0);
-    }
-  }while(coor->x < 0 || coor->x > 9);
+      if((int)xChar >= 48 && (int)xChar <= 57 && nbCarAfter == 0){
+        coor->x = (int)xChar - 48;
+      }else{
+        couleur(31);
+        printf("Format incorrect.\n");
+        couleur(0);
+      }
+    }while(coor->x < 0 || coor->x > 9);
 
-  do{
-    printf("Entrez y :\n");
-    scanf("%c", &yChar);
+    do{
+      printf("Entrez y :\n");
+      scanf("%c", &yChar);
 
-    nbCarAfter = clearBuffer();
+      nbCarAfter = clearBuffer();
 
-    if((int)yChar >= 48 && (int)yChar <= 57 && nbCarAfter == 0){
-      coor->y = (int)yChar - 48;
-    }else{
-      couleur(31);
-      printf("Format incorrect.\n");
-      couleur(0);
-    }
-  }while(coor->y < 0 || coor->y > 9);
+      if((int)yChar >= 48 && (int)yChar <= 57 && nbCarAfter == 0){
+        coor->y = (int)yChar - 48;
+      }else{
+        couleur(31);
+        printf("Format incorrect.\n");
+        couleur(0);
+      }
+    }while(coor->y < 0 || coor->y > 9);
 }
 
 int testCoor(Coordonnees position, Square map[][TAILLE], int player){

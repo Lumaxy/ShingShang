@@ -4,5 +4,7 @@
 
 int loadConfig(Config *config);
 void saveConfig(Config config);
+void configuration(Config *config);
+void inputString(char buff[255]);
 
 #endif

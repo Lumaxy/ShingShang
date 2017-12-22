@@ -4,5 +4,7 @@
 
 void testWin(int *isplaying, Square map[][TAILLE]);
 int clearBuffer();
+int choix(int i);
+int answer(const char question[255]);
 
 #endif

@@ -64,7 +64,6 @@ int testJump(Coordonnees position, Coordonnees target, Coordonnees old, Square m
             //possibilité de sauter
             res = 1;
           }
-
         }else{
           printf("La case n'est pas à la bonne distance de saut\n" );
         }

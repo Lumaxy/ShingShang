@@ -50,14 +50,14 @@ int main(int argc, char const *argv[]) {
   loadConfig(&config);
   srand(time(NULL));
   int isPlaying = 1; //tant que personne ne gagne, isPlaying = 1
-  int player = (rand()% 2) + 1; // Premier joueur a jouer
   //Message indicatif pour le joueur
   char msg[50];
   msg[0] = '\0';
   int msgColor = 31;
+
+  int player = (rand()% 2) + 1; // Premier joueur a jouer
   int nbDragRed = 2;
   int nbDragBlue = 2;
-
   int switchPlayer = 1; // permet de savoir si il y a changement de joueur (== 0 si la personne a manger un bushi adverse et souhaite rejouer)
   Coordonnees oldBushi;
 
@@ -79,7 +79,6 @@ int main(int argc, char const *argv[]) {
     case 1:
     initMap(map);
     initPiece(map, &red, &blue);
-    saveGame(map);
     break;
 
     case 2:
@@ -87,11 +86,18 @@ int main(int argc, char const *argv[]) {
     break;
 
     case 3:
-
+    printf("Pas encore dispo\n");
+    exit(0);
     break;
 
     case 4:
-
+    configuration(&config);
+    red.color = config.colorTeam1;
+    blue.color = config.colorTeam2;
+    strcpy(red.name, config.nameTeam1);
+    strcpy(blue.name, config.nameTeam2);
+    initMap(map);
+    initPiece(map, &red, &blue);
     break;
   }
 
@@ -105,6 +111,9 @@ int main(int argc, char const *argv[]) {
     Coordonnees old = {0,0}; //Coordonnees de la derniere case
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
+    //sauvegarde automatique
+    saveGame(map);
+
     printMap(map, config);
 
     //On affiche le joueur actif
@@ -114,6 +123,15 @@ int main(int argc, char const *argv[]) {
     couleur(msgColor);
     printf("%s\n", msg);
     couleur(0);
+
+
+
+    //Obtention de la reponse du joueur--
+
+    //-----------------------------------
+
+    // saveGame(map);
+
 
     //Obtention Coordonnée du pion à bouger
     if(switchPlayer == 0){

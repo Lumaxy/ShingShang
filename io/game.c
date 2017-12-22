@@ -182,4 +182,6 @@ void saveGame(Square tab[][TAILLE]){
     fclose(pieces_numEquip);
     printf("Saving pieces_numEquip : OK\n");
   }
+
+  printf("Sauvegarde : OK\n");
 }
