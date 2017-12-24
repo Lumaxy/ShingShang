@@ -1,3 +1,8 @@
 #! /bin/bash
 clear
-gcc -lm -Wall *.c moteur/*.c io/*.c -o Shing
+if [ $# -ge 2 ]
+then gcc -lm -Wall *.c moteur/*.c io/*.c -o Shing $1 $2
+echo $1 $2
+else gcc -lm -Wall *.c moteur/*.c io/*.c -o Shing 
+fi
+Shing

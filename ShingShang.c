@@ -31,6 +31,7 @@
 
 #define TAILLE 10 //definie la taille du plateau
 
+
 /*
 ###################DEBUG####################
 printf("Jump distance(p, x1, y1) : %d\n", distance(p, x1, y1));
@@ -38,18 +39,19 @@ printf("oC.x : %d oC.y : %d x : %d y : %d x1 : %d y1 : %d resJump : %d \n", oldC
 ############################################
 */
 
-
 int main(int argc, char const *argv[]) {
-
-  //TODO Menu pour choisir console / sdl / config
+  //TODO traduction en plusieurs language avec les DEFINE
+  //TODO jeux en reseau TCP socket
+  //TODO creer le fichier manquant loadGame(IO)
   //TODO faire de ne pas terminer sur un portail a la fin d'un tour
-  //TODO FICHIER DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //TODO System de message indicatif
 
   //Initialisation des variables ---------------------------------
   Config config;
   loadConfig(&config);
   srand(time(NULL));
   int isPlaying = 1; //tant que personne ne gagne, isPlaying = 1
+
   //Message indicatif pour le joueur
   char msg[50];
   msg[0] = '\0';
@@ -60,6 +62,7 @@ int main(int argc, char const *argv[]) {
   int nbDragBlue = 2;
   int switchPlayer = 1; // permet de savoir si il y a changement de joueur (== 0 si la personne a manger un bushi adverse et souhaite rejouer)
   Coordonnees oldBushi;
+  Data tmp;
 
   //-----------------------------------------------------------------
 
@@ -76,21 +79,30 @@ int main(int argc, char const *argv[]) {
 
   Square map[TAILLE][TAILLE]; // Plateau de jeu
   switch(menu()){
-    case 1:
+    case 1: // Nouvelle partie
     initMap(map);
     initPiece(map, &red, &blue);
     break;
 
-    case 2:
-    loadGame(map, &red, &blue);
+    case 2: //Reprise de partie
+    loadGame(map, &red, &blue, &tmp);
+    player = tmp.player;
+    nbDragRed = tmp.nbDragRed;
+    nbDragBlue = tmp.nbDragBlue;
+    switchPlayer = tmp.switchPlayer;
+    oldBushi.x = (tmp.oldBushi).x;
+    oldBushi.y = (tmp.oldBushi).y;
     break;
 
-    case 3:
-    printf("Pas encore dispo\n");
-    exit(0);
+    case 3: //Jeux en reseau heberge
+    printf("En cours de developpement\n");
     break;
 
-    case 4:
+    case 4: //Jeux en reseau rejoindre
+    printf("En cours de developpement\n");
+    break;
+
+    case 5: //Configuration
     configuration(&config);
     red.color = config.colorTeam1;
     blue.color = config.colorTeam2;
@@ -102,7 +114,7 @@ int main(int argc, char const *argv[]) {
   }
 
   //TODO A SUPPRIMER
-  player = 1; // Forcer le premier joueur pour les test
+  // player = 1; // Forcer le premier joueur pour les test
 
   //Chaque boucle correspond a un tour.
   while(isPlaying && nbDragRed > 0 && nbDragBlue > 0){
@@ -112,7 +124,8 @@ int main(int argc, char const *argv[]) {
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
 
     //sauvegarde automatique
-    saveGame(map);
+    Data tmp = {player, nbDragRed, nbDragBlue, switchPlayer, oldBushi};
+    saveGame(map, tmp);
 
     printMap(map, config);
 
@@ -123,15 +136,6 @@ int main(int argc, char const *argv[]) {
     couleur(msgColor);
     printf("%s\n", msg);
     couleur(0);
-
-
-
-    //Obtention de la reponse du joueur--
-
-    //-----------------------------------
-
-    // saveGame(map);
-
 
     //Obtention Coordonnée du pion à bouger
     if(switchPlayer == 0){

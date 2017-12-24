@@ -41,6 +41,15 @@ struct Config{
 typedef struct Coordonnees Coordonnees;
 struct Coordonnees{
   int x;
-  int y;  
+  int y;
+};
+
+typedef struct Data Data;
+struct Data{
+  int player;
+  int nbDragRed;
+  int nbDragBlue;
+  int switchPlayer;
+  Coordonnees oldBushi;
 };
 #endif

@@ -8,7 +8,8 @@ int menu(){
   printf("-------Menu-------\n");
   printf("1 - Nouvelle partie\n");
   printf("2 - Reprendre la partie\n");
-  printf("3 - Jeux graphique\n");
-  printf("4 - Configuration\n");
+  printf("3 - Jeux en réseau : héberger\n");
+  printf("4 - Jeux en réseau : rejoindre\n");
+  printf("5 - Configuration\n");
   return choix(4);
 }

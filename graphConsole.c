@@ -25,7 +25,7 @@
 */
 
 /* ------------------------------------------ LINUX -------------------------------------*/
-#ifdef __unix__
+// #ifdef __unix__
 #include <stdlib.h>
 #include <string.h>
 
@@ -37,17 +37,21 @@ int getWidth()  {
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   return w.ws_col;
 }
+
 int getHeight()  {
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   return w.ws_row;
 }
+
 void couleur(int couleur){
   printf("\033[%dm", couleur);
 }
+
 void clear() {
   printf("\033[H\033[2J");
 }
+
 void ligne(Config config){
   int i;
   int espace = getWidth();
@@ -58,25 +62,54 @@ void ligne(Config config){
   }
   couleur(0);
 }
+
+void printCoor(Config config){
+  int i;
+  centrer(config);
+  couleur(config.frameColor);
+  printf("  ");
+  for(i = 0; i < 9; i++){
+    printf("%c%c", i + 48, ' ');
+  }
+  printf("9");
+  couleur(31);
+  printf(" X  ");
+  couleur(0);
+
+  /* FIN DE LIGNE */
+  int espace = (getWidth() / 2) - (TAILLE + 4) - 4;
+
+  if(espace%2 == 0){
+    espace--;
+  }
+
+  couleur(config.frameColor);
+  for(i = 0; i < espace+6; i++){
+    printf(" ");
+  }
+  couleur(0);
+  /* ------------ */
+
+}
 /* --------------------------------------------------------------------------------------- */
 
 /* ------------------------------------- WINDOWS ----------------------------------------- */
-#elif defined(_WIN32) || defined(WIN32)     /* _Win32 is usually defined by compilers targeting 32 or   64 bit Windows systems */
-
-#include <windows.h>
-#include <tchar.h>
-#define DIV 1048576
-
-int getWidth() {
-  CONSOLE_SCREEN_BUFFER_INFO csbi;
-  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-  return csbi.srWindow.Right - csbi.srWindow.Left + 1;
-}
-
-void couleur(int couleur){}
-void clear(Config config){}
-void ligne(config config){}
-#endif
+// #elif defined(_WIN32) || defined(WIN32)
+//
+// #include <windows.h>
+// #include <tchar.h>
+// #define DIV 1048576
+//
+// int getWidth() {
+//   CONSOLE_SCREEN_BUFFER_INFO csbi;
+//   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+//   return csbi.srWindow.Right - csbi.srWindow.Left + 1;
+// }
+//
+// void couleur(int couleur){}
+// void clear(Config config){}
+// void ligne(config config){}
+// #endif
 /* ---------------------------------------------------------------------------------------- */
 
 
@@ -85,7 +118,7 @@ void ligne(config config){}
 //Fonction graphique
 void centrer(Config config){
   int i;
-  int espace = (getWidth() / 2) - (TAILLE);
+  int espace = (getWidth() / 2) - (TAILLE) - 2;
   couleur(config.frameColor);
   for(i = 0; i < espace; i++){
     printf(" ");
@@ -108,6 +141,68 @@ void finLigne(Config config){
   couleur(0);
 }
 
+void printSquare(Square square, Config config){
+  switch(square.type){
+    //Hors plateau
+    case -1:
+    couleur(config.frameColor);
+    printf(" ");
+    break;
+    //Normal
+    case 0:
+    //Case Pleine ?
+    if(square.isFill == 1){
+      couleur(square.piece.team->color);
+      //type du pion?
+      int type = square.piece.type;
+      if(type == 1){
+        printf("S");
+      }else if(type == 2){
+        printf("L");
+      }else if(type == 3){
+        printf("D");
+      }
+    }else{
+      couleur(config.squareColor);
+      // char sqr = config.squareChar;
+      printf("%c",config.squareChar);
+    }
+    break;
+    case 2:
+    if(square.isFill == 1){
+      couleur(square.piece.team->color);
+      int type = square.piece.type;
+      if(type == 1){
+        printf("S");
+      }else if(type == 2){
+        printf("L");
+      }else if(type == 3){
+        printf("D");
+      }
+    }else{
+      couleur(config.colorTeam1);
+      printf("P");
+    }
+    break;
+    case 3:
+    if(square.isFill == 1){
+      couleur(square.piece.team->color);
+      int type = square.piece.type;
+      if(type == 1){
+        printf("S");
+      }else if(type == 2){
+        printf("L");
+      }else if(type == 3){
+        printf("D");
+      }
+    }else{
+      couleur(config.colorTeam2);
+      printf("P");
+    }
+    break;
+  }
+}
+
 void printMap(Square map[][TAILLE], Config config){
   int x, y;
 
@@ -115,80 +210,38 @@ void printMap(Square map[][TAILLE], Config config){
 
   ligne(config);
   ligne(config);
+  printCoor(config);
 
   //--------------------Parcous tableau---------------------
   for(y = 0; y < TAILLE; y++){
     centrer(config);
+    couleur(config.frameColor);
+    printf("%d ", y);
+    couleur(0);
     for(x = 0; x < TAILLE; x++){
       if(x != 0){
         printf(" ");
       }
       //Test du type de la case eet action en consquence
-      switch(map[x][y].type){
-        //Hors plateau
-        case -1:
-        couleur(config.frameColor);
-        printf(" ");
-        break;
-        //Normal
-        case 0:
-        //Case Pleine ?
-        if(map[x][y].isFill == 1){
-          couleur(map[x][y].piece.team->color);
-          //type du pion?
-          int type = map[x][y].piece.type;
-          if(type == 1){
-            printf("S");
-          }else if(type == 2){
-            printf("L");
-          }else if(type == 3){
-            printf("D");
-          }
-        }else{
-          couleur(config.squareColor);
-          // char sqr = config.squareChar;
-          printf("%c",config.squareChar);
-        }
-        break;
-        case 2:
-        if(map[x][y].isFill == 1){
-          couleur(map[x][y].piece.team->color);
-          int type = map[x][y].piece.type;
-          if(type == 1){
-            printf("S");
-          }else if(type == 2){
-            printf("L");
-          }else if(type == 3){
-            printf("D");
-          }
-        }else{
-          couleur(config.colorTeam1);
-          printf("P");
-        }
-        break;
-        case 3:
-        if(map[x][y].isFill == 1){
-          couleur(map[x][y].piece.team->color);
-          int type = map[x][y].piece.type;
-          if(type == 1){
-            printf("S");
-          }else if(type == 2){
-            printf("L");
-          }else if(type == 3){
-            printf("D");
-          }
-        }else{
-          couleur(config.colorTeam2);
-          printf("P");
-        }
-        break;
-      }
+      printSquare(map[x][y], config);
       couleur(0);
     }
     finLigne(config);
     printf("\n");
   }
   // ---------------------------------------------------
+
+  //Affiche le Y en bas
+  centrer(config);
+  couleur(config.frameColor);
+  couleur(31);
+  printf("Y");
+  for(x = 0; x < TAILLE; x++){
+    printf("  ");
+  }
+  couleur(0);
+  finLigne(config);
+  //---------------------
 
   //ligne du bas
   ligne(config);

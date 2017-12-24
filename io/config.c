@@ -91,6 +91,8 @@ void saveConfig(Config config){
     fprintf(file, "%s = %d\n", "colorTeam2", config.colorTeam2);
     fprintf(file, "%s = %d\n", "squareColor", config.squareColor);
     fprintf(file, "%s = %d\n", "squareChar", config.squareChar);
+    fprintf(file, "%s = %d\n", "frameColor", config.frameColor);
+
     printf("Sauvegarde config : OK\n");
     fclose(file);
   }

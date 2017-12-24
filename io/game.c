@@ -10,19 +10,22 @@
 #include <sys/types.h>
 #define TAILLE 10
 
-int loadGame(Square tab[][TAILLE], Team *red, Team *blue){
+int loadGame(Square tab[][TAILLE], Team *red, Team *blue, Data *dataBuff){
   FILE *map_type;
   FILE *map_isFill;
 
   FILE *pieces_type;
   FILE *pieces_numEquip;
 
-  char *mode = "r";
-  char map_type_name[255] = "save/Map/type";
-  char map_isFill_name[255] = "save/Map/isFill";
+  FILE *data;
 
-  char pieces_numEquip_name[255] = "save/Pieces/numEquip";
-  char pieces_type_name[255] = "save/Pieces/type";
+  char *mode = "r";
+  char *map_type_name = "save/Map/type";
+  char *map_isFill_name = "save/Map/isFill";
+
+  char *pieces_numEquip_name = "save/Pieces/numEquip";
+  char *pieces_type_name = "save/Pieces/type";
+  char *data_name = "save/data";
 
   map_type = fopen(map_type_name, mode);
   map_isFill = fopen(map_isFill_name, mode);
@@ -30,9 +33,11 @@ int loadGame(Square tab[][TAILLE], Team *red, Team *blue){
   pieces_numEquip = fopen(pieces_numEquip_name, mode);
   pieces_type = fopen(pieces_type_name, mode);
 
+  data = fopen(data_name, mode);
+
   int x = 0, y = 0;
 
-  if(map_type == NULL || map_isFill == NULL || pieces_numEquip == NULL || pieces_type == NULL){
+  if(map_type == NULL || map_isFill == NULL || pieces_numEquip == NULL || pieces_type == NULL || data == NULL){
     fprintf(stderr, "Erreur de lecture de sauvegarde. Un fichier est manquant.\n");
     //TODO creer le fichier manquant
     // printf("Fichier de sauvegarde créé.\n");
@@ -43,6 +48,7 @@ int loadGame(Square tab[][TAILLE], Team *red, Team *blue){
     int valPieceNumEquip;
     int valPieceType;
     char c, tmp;
+    //Chargement Plateau avec pions
     while(fscanf(map_type, "%d%c", &valMapType, &c) != EOF){
       fscanf(map_isFill, "%d%c", &valMapIsFill, &tmp);
       fscanf(pieces_numEquip, "%d%c", &valPieceNumEquip, &tmp);
@@ -63,22 +69,31 @@ int loadGame(Square tab[][TAILLE], Team *red, Team *blue){
         x=0;
       }
     }
+
+    fscanf(data, "%d/", &(dataBuff->player));
+    fscanf(data, "%d/", &(dataBuff->nbDragRed));
+    fscanf(data, "%d/", &(dataBuff->nbDragBlue));
+    fscanf(data, "%d/", &(dataBuff->switchPlayer));
+    fscanf(data, "%d/", &(dataBuff->oldBushi.x));
+    fscanf(data, "%d/", &(dataBuff->oldBushi.y));
+
     fclose(map_type);
     fclose(map_isFill);
     fclose(pieces_numEquip);
     fclose(pieces_type);
+    fclose(data);
     return 0;
   }
 }
 
-void saveGame(Square tab[][TAILLE]){
+void saveGame(Square tab[][TAILLE], Data dataBuff){
   FILE *map_type;
   FILE *map_isFill;
 
   FILE *pieces_type;
   FILE *pieces_numEquip;
 
-  // FILE *data;
+  FILE *data;
 
   //https://stackoverflow.com/questions/7430248/creating-a-new-directory-in-c
   mkdir("save", 0700);
@@ -87,13 +102,12 @@ void saveGame(Square tab[][TAILLE]){
 
 
   char *mode = "w+";
-  char map_type_name[255] = "save/Map/type";
-  char map_isFill_name[255] = "save/Map/isFill";
+  char *map_type_name  = "save/Map/type";
+  char *map_isFill_name  = "save/Map/isFill";
 
-  char pieces_numEquip_name[255] = "save/Pieces/numEquip";
-  char pieces_type_name[255] = "save/Pieces/type";
-  // char data_name[255] = "save/data";
-
+  char *pieces_numEquip_name  = "save/Pieces/numEquip";
+  char *pieces_type_name  = "save/Pieces/type";
+  char *data_name = "save/data";
 
   int x, y;
 
@@ -103,7 +117,7 @@ void saveGame(Square tab[][TAILLE]){
   pieces_numEquip = fopen(pieces_numEquip_name, mode);
   pieces_type = fopen(pieces_type_name, mode);
 
-  // data = fopen(data_name, mode);
+  data = fopen(data_name, mode);
 
   //map_type
   if(map_type == NULL){
@@ -182,6 +196,21 @@ void saveGame(Square tab[][TAILLE]){
     fclose(pieces_numEquip);
     printf("Saving pieces_numEquip : OK\n");
   }
+
+  //data
+  if(data == NULL){
+    fprintf(stderr, "Error while saving data\n");
+  }else{
+    fprintf(data, "%d/", dataBuff.player);
+    fprintf(data, "%d/", dataBuff.nbDragRed);
+    fprintf(data, "%d/", dataBuff.nbDragBlue);
+    fprintf(data, "%d/", dataBuff.switchPlayer);
+    fprintf(data, "%d/", dataBuff.oldBushi.x);
+    fprintf(data, "%d/", dataBuff.oldBushi.y);
+
+    fclose(data);
+    printf("Saving data : OK\n");
+    }
 
   printf("Sauvegarde : OK\n");
 }

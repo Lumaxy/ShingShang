@@ -1,7 +1,10 @@
-#include <stdio.h>
+#include "../language.h"
+
 #include "../structure.h"
-#include "moteur.h"
 #include "../graphConsole.h"
+#include "moteur.h"
+
+#include <stdio.h>
 #define TAILLE 10
 
 //Fonction Moteur
@@ -54,7 +57,7 @@ int choix(int i){
   int nbAfter = 0;
   int x = -1;
   do{
-    printf("Entrez votre choix :\n");
+    printf(CHOICE);
     scanf("%c", &xChar);
 
     nbAfter = clearBuffer();
