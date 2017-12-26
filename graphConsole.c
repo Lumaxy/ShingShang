@@ -152,7 +152,7 @@ void printSquare(Square square, Config config){
     case 0:
     //Case Pleine ?
     if(square.isFill == 1){
-      couleur(square.piece.team->color);
+      couleur(square.piece.team.color);
       //type du pion?
       int type = square.piece.type;
       if(type == 1){
@@ -170,7 +170,7 @@ void printSquare(Square square, Config config){
     break;
     case 2:
     if(square.isFill == 1){
-      couleur(square.piece.team->color);
+      couleur(square.piece.team.color);
       int type = square.piece.type;
       if(type == 1){
         printf("S");
@@ -186,7 +186,7 @@ void printSquare(Square square, Config config){
     break;
     case 3:
     if(square.isFill == 1){
-      couleur(square.piece.team->color);
+      couleur(square.piece.team.color);
       int type = square.piece.type;
       if(type == 1){
         printf("S");

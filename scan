@@ -1,0 +1,19 @@
+#! /bin/bash
+tmp=1
+while [ 1 = 1 ]
+do
+gcc -lm -Wall *.c moteur/*.c io/*.c -o Shing
+if [ "$?" == "0" ]
+then
+if [ "$tmp" == "1" ]
+then
+echo aucune erreur
+tmp=0
+sleep 2
+fi
+else
+tmp=1
+sleep 2
+clear
+fi
+done

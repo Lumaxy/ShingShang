@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #define TAILLE 10
 
-int loadGame(Square tab[][TAILLE], Team *red, Team *blue, Data *dataBuff){
+int loadGame(Square tab[][TAILLE], Team red, Team blue, Data *dataBuff){
   FILE *map_type;
   FILE *map_isFill;
 
@@ -183,7 +183,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
     for(y = 0; y < TAILLE; y++){
       for(x = 0; x < TAILLE; x++){
         if(tab[x][y].isFill == 1){
-          fprintf(pieces_numEquip, "%d", tab[x][y].piece.team->numEquip);
+          fprintf(pieces_numEquip, "%d", tab[x][y].piece.team.numEquip);
         }else{
           fprintf(pieces_numEquip, "0");
         }

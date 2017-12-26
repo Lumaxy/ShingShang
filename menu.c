@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "language.h"
 #include "structure.h"
 #include "graphConsole.h"
 #include "moteur/moteur.h"
@@ -6,10 +7,10 @@
 int menu(){
   printf("  Shing - Shang\n");
   printf("-------Menu-------\n");
-  printf("1 - Nouvelle partie\n");
-  printf("2 - Reprendre la partie\n");
-  printf("3 - Jeux en réseau : héberger\n");
-  printf("4 - Jeux en réseau : rejoindre\n");
-  printf("5 - Configuration\n");
-  return choix(4);
+  printf(MENU_1);
+  printf(MENU_2);
+  printf(MENU_3);
+  printf(MENU_4);
+  printf(MENU_5);
+  return choix(5);
 }

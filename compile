@@ -5,4 +5,3 @@ then gcc -lm -Wall *.c moteur/*.c io/*.c -o Shing $1 $2
 echo $1 $2
 else gcc -lm -Wall *.c moteur/*.c io/*.c -o Shing 
 fi
-Shing

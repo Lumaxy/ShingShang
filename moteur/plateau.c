@@ -1,7 +1,7 @@
 #include "../structure.h"
 #include "plateau.h"
 
-void initPiece(Square map[][TAILLE], Team *red, Team *blue){
+void initPiece(Square map[][TAILLE], Team red, Team blue){
   int x,y;
 
   //Haut Gauche

@@ -2,6 +2,7 @@
 #include "config.h"
 #include "../graphConsole.h"
 #include "../moteur/moteur.h"
+#include "../language.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +21,7 @@ int loadConfig(Config *config){
 
   file = fopen(filename, mode);
   if(file == NULL){
-    fprintf(stderr, "Pas de fichier ou pas les droits.\n");
+    fprintf(stderr, ERR_NO_FILE);
     file = fopen(filename, "w+");
     fprintf(file, "%s = %s\n", "nameTeam1", "Les tigres");
     fprintf(file, "%s = %d\n", "colorTeam1", 31);
@@ -31,7 +32,7 @@ int loadConfig(Config *config){
     fprintf(file, "%s = %d\n", "spaceColor", 47);
 
     fclose(file);
-    printf("Fichier de sauvegarde créé.\n");
+    printf(INFO_NEW_SAVE);
     file = fopen(filename, mode);
   }
   while(fscanf(file, "%s = ", property) != EOF){
@@ -83,7 +84,7 @@ void saveConfig(Config config){
   file = fopen(filename, mode);
 
   if(file == NULL){
-    printf("Error\n");
+    printf(ERR);
   }else{
     fprintf(file, "%s = %s\n", "nameTeam1", config.nameTeam1);
     fprintf(file, "%s = %d\n", "colorTeam1", config.colorTeam1);
@@ -93,7 +94,7 @@ void saveConfig(Config config){
     fprintf(file, "%s = %d\n", "squareChar", config.squareChar);
     fprintf(file, "%s = %d\n", "frameColor", config.frameColor);
 
-    printf("Sauvegarde config : OK\n");
+    printf(SAVE_CONFIG);
     fclose(file);
   }
 }
@@ -117,41 +118,41 @@ void configuration(Config *config){
   do{
     char buffer[255];
     clear();
-    printf("--- Configuration du jeu ---\n");
-    printf("1) Modifier l'équipe 1\n");
-    printf("2) Modifier l'équipe 2\n");
-    printf("3) Modifier le plateau\n");
-    printf("4) Quitter et jouer une nouvelle partie\n");
+    printf(CONF_TITLE);
+    printf(CONF_1);
+    printf(CONF_2);
+    printf(CONF_3);
+    printf(CONF_4);
     switch(choix(4)){
       clear();
       case 1:
-      printf("--- Configuration du jeu ---\n");
-      printf("1) Nom de l'équipe\n");
-      printf("2) Couleur\n");
+      printf(CONF_11);
+      printf(CONF_12);
+      printf(CONF_13);
       switch (choix(2)) {
         case 1:
-        printf("Entrez le nom de l'équipe 1\n");
+        printf(CONF_121);
         inputString(buffer);
         strcpy(config->nameTeam1, buffer);
         break;
         case 2:
-        printf("Entrez le code couleur de l'équipe 1\n");
+        printf(CONF_131);
         scanf("%d", &(config->colorTeam1));
         break;
       }
       break;
       case 2:
-      printf("--- Configuration du jeu ---\n");
-      printf("1) Nom de l'équipe\n");
-      printf("2) Couleur\n");
+      printf(CONF_21);
+      printf(CONF_22);
+      printf(CONF_23);
       switch (choix(2)) {
         case 1:
-        printf("Entrez le nom de l'équipe 2\n");
+        printf(CONF_121);
         inputString(buffer);
         strcpy(config->nameTeam1, buffer);
         break;
         case 2:
-        printf("Entrez le code couleur de l'équipe 2  \n");
+        printf(CONF_131);
         scanf("%d", &(config->colorTeam1));
         break;
       }

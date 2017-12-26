@@ -17,9 +17,9 @@ void testWin(int *isPlaying, Square map[][TAILLE]){
     for(x = 4; x <= 5; x++){
       if(map[x][y].isFill == 1){
         if(map[x][y].piece.type == 3){
-          if(map[x][y].piece.team->numEquip != team){
+          if(map[x][y].piece.team.numEquip != team){
             *isPlaying = 0;
-            printf("Victoire de l'équipe %s\n", map[x][y].piece.team->name);
+            printf("Victoire de l'équipe %s\n", map[x][y].piece.team.name);
           }
         }
       }

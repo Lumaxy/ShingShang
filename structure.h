@@ -14,7 +14,7 @@ struct Piece{
   int x, y;
   // 3 Dragon / 2 Lion / 1 Singe
   int type;
-  struct Team *team;
+  struct Team team;
 };
 
 typedef struct Square Square;

@@ -50,7 +50,7 @@ int testCoor(Coordonnees position, Square map[][TAILLE], int player){
     if(tmp.isFill == 1){
       Piece p = tmp.piece;
       //Le pion lui appartient ?
-      if(p.team->numEquip == player){
+      if(p.team.numEquip == player){
         res = 1;
       }else{
         res = 2;
