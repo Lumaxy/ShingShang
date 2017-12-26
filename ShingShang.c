@@ -74,12 +74,15 @@ void decodeMap(Square map[TAILLE][TAILLE], Square buffer[TAILLE*TAILLE]){
 
 int main(int argc, char const *argv[]) {
   //TODO traduction en plusieurs language avec les DEFINE
-  //TODO jeux en reseau TCP socket
   //TODO creer le fichier manquant loadGame(IO)
   //TODO faire de ne pas terminer sur un portail a la fin d'un tour
   //TODO System de message indicatif
   //TODO Verif les define au debut des include .h
   //TODO gerer les erreur afficher au joueur
+  //TODO verif les boucle for / while
+  //TODO verif le franglais
+  //TODO virer la compatibilite win/linux
+  //TODO changer numEquip
 
   //Initialisation des variables ---------------------------------
   Config config;

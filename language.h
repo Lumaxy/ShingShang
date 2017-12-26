@@ -43,6 +43,12 @@
 #define INFO_NEW_SAVE "Backup file created.\n"
 
 #define SAVE_CONFIG "Config backup : OK\n"
+#define SAVE_MAP_TYPE "Saving map_type : OK\n"
+#define SAVE_MAP_ISFILL "Saving map_isFill : OK\n"
+#define SAVE_PIECE_TYPE "Saving pieces_type : OK\n"
+#define SAVE_PIECE_NUMEQUIP "Saving pieces_numEquip : OK\n"
+#define SAVE_DATA "Saving data : OK\n"
+#define SAVE "Backup complete.\n"
 
 /* ---- Configuration ---- */
 #define CONF_TITLE "--- Game configuration ---\n"
@@ -63,6 +69,18 @@
 #define CONF_23 "2) Alter team color\n"
 #define CONF_231 "Enter the color code\n"
 
+#define CONF_31 "--- Board configuration ---\n"
+#define CONF_32 "1) Alter empty square color\n"
+#define CONF_321 "Enter empty square color code\n"
+#define CONF_33 "2) Alter empty square character\n"
+#define CONF_331 "Enter empty square character\n"
+#define CONF_34 "3) Alter frame color\n"
+#define CONF_341 "Enter frame color code\n"
+/* ---- ------------- ---- */
+
+/* ---- INPUT ---- */
+#define COOR_1 "Enter x :\n"
+/* ---- ----- ---- */
 
 
 #endif

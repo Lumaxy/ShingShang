@@ -1,4 +1,5 @@
 #include "../structure.h"
+#include "../language.h"
 #include "coor.h"
 #include "../graphConsole.h"
 #include "moteur.h"
@@ -11,7 +12,7 @@ void getCoor(Coordonnees *coor){
   coor->x = -1;
   coor->y = -1;
     do{
-      printf("Entrez x :\n");
+      printf(COOR_1);
       scanf("%c", &xChar);
 
       nbCarAfter = clearBuffer();

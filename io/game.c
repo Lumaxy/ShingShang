@@ -1,4 +1,5 @@
 #include "../structure.h"
+#include "../language.h"
 #include "game.h"
 
 #include <stdio.h>
@@ -133,7 +134,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
       fprintf(map_type, "\n");
     }
     fclose(map_type);
-    printf("Saving map_type : OK\n");
+    printf(SAVE_MAP_TYPE);
   }
 
   //map_isFill
@@ -150,7 +151,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
       fprintf(map_isFill, "\n");
     }
     fclose(map_isFill);
-    printf("Saving map_isFill : OK\n");
+    printf(SAVE_MAP_ISFILL);
   }
 
 
@@ -172,7 +173,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
       fprintf(pieces_type, "\n");
     }
     fclose(pieces_type);
-    printf("Saving pieces_type : OK\n");
+    printf(SAVE_PIECE_TYPE);
   }
 
 
@@ -194,7 +195,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
       fprintf(pieces_numEquip, "\n");
     }
     fclose(pieces_numEquip);
-    printf("Saving pieces_numEquip : OK\n");
+    printf(SAVE_PIECE_NUMEQUIP);
   }
 
   //data
@@ -209,8 +210,8 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
     fprintf(data, "%d/", dataBuff.oldBushi.y);
 
     fclose(data);
-    printf("Saving data : OK\n");
+    printf(SAVE_DATA);
     }
 
-  printf("Sauvegarde : OK\n");
+  printf(SAVE);
 }

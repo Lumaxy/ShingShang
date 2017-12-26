@@ -159,21 +159,21 @@ void configuration(Config *config){
       break;
       case 3:
       clear();
-      printf("--- Configuration du plateau ---\n");
-      printf("1) Couleur des cases vides\n");
-      printf("2) Caractère des cases vides\n");
-      printf("3) Couleur du cadre autour\n");
+      printf(CONF_31);
+      printf(CONF_32);
+      printf(CONF_33);
+      printf(CONF_34);
       switch (choix(3)) {
         case 1:
-        printf("Entrez le code couleur des cases vides\n");
+        printf(CONF_321);
         scanf("%d", &(config->squareColor));
         break;
         case 2:
-        printf("Entrez le caractère des cases vides\n");
+        printf(CONF_331);
         scanf("%c", &(config->squareChar));
         break;
         case 3:
-        printf("Entrez le code couleur du cadre autour\n");
+        printf(CONF_341);
         scanf("%d", &(config->frameColor));
         break;
       }
