@@ -48,12 +48,8 @@ typedef struct sockaddr SOCKADDR;
 
 int main(int argc, char const *argv[]) {
   //TODO traduction en plusieurs language avec les DEFINE
-  //TODO creer le fichier manquant loadGame(IO)
-  //TODO faire de ne pas terminer sur un portail a la fin d'un tour
   //TODO System de message indicatif
   //TODO gerer les erreur afficher au joueur
-  //TODO verif le franglais
-  //TODO virer la compatibilite win/linux
 
   //Initialisation des variables ---------------------------------
   Config config;
@@ -105,13 +101,17 @@ int main(int argc, char const *argv[]) {
     break;
 
     case 2: //Reprise de partie
-    loadGame(map, red, blue, &tmp);
-    player = tmp.player;
-    nbDragRed = tmp.nbDragRed;
-    nbDragBlue = tmp.nbDragBlue;
-    switchPlayer = tmp.switchPlayer;
-    oldBushi.x = (tmp.oldBushi).x;
-    oldBushi.y = (tmp.oldBushi).y;
+    if(loadGame(map, red, blue, &tmp) == 0){
+      player = tmp.player;
+      nbDragRed = tmp.nbDragRed;
+      nbDragBlue = tmp.nbDragBlue;
+      switchPlayer = tmp.switchPlayer;
+      oldBushi.x = (tmp.oldBushi).x;
+      oldBushi.y = (tmp.oldBushi).y;
+    }else{
+      initMap(map);
+      initPiece(map, red, blue);
+    }
     break;
 
     case 3: //Jeux en reseau heberge
@@ -149,10 +149,6 @@ int main(int argc, char const *argv[]) {
     break;
   }
 
-  /*
-  recv(sock, (char*)&tmp, sizeof(char), 0);
-  send(csock, buffer, 32, 0);
-  */
   //Echange du joueur qui commencce
   if(network == 1){
     char tmp = player;
@@ -170,11 +166,12 @@ int main(int argc, char const *argv[]) {
 
   //Chaque boucle correspond a un tour.
   while(isPlaying && nbDragRed > 0 && nbDragBlue > 0){
+    /*---- VARIABLES RELATIVES A CHAQUE TOUR ---- */
     Coordinate position; //Coordinate actuelle
     Coordinate target; //Coordinate visees
     Coordinate old = {0,0}; //Coordinate de la derniere case
     int sautTotal = 0; //Nombre de saut effectuer dans un tour
-
+    /* ---- ------------------------------ ---- */
 
     //sauvegarde automatique si on ne joue pas en reseau
     if(network == 0){
@@ -234,6 +231,11 @@ int main(int argc, char const *argv[]) {
             //Permet d'eviter que le pion apres avoir bouger puisse sauter
             if(resMove == 0){
               resJump = testJump(position, target, old, map);
+              if(resJump == -1){
+                printf(ERR_JUMP_DISTANCE);
+              }else if(resJump == -2){
+                printf(ERR_JUMP_BACK);
+              }
             }
           }while(resMove != 1 && resJump != 1);
           if (resJump == 1) {

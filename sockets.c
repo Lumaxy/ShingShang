@@ -8,11 +8,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 
-int join(SOCKET *sock, SOCKADDR_IN *sin){
+void join(SOCKET *sock, SOCKADDR_IN *sin){
   char ip[20];
   int port;
   int sock_err;
@@ -36,14 +37,14 @@ int join(SOCKET *sock, SOCKADDR_IN *sin){
   printf(SOCK_CONNECT, port);
   do {
     sock_err = connect(*sock, (SOCKADDR *)sin, sizeof(*sin));
+    sleep(1);
   } while(sock_err == SOCKET_ERROR);
-
-  return 0;
 }
 
-void host(SOCKET *sock, SOCKET *csock, SOCKADDR_IN *sin, SOCKADDR_IN *csin){
+int host(SOCKET *sock, SOCKET *csock, SOCKADDR_IN *sin, SOCKADDR_IN *csin){
   int port;
   int sock_err;
+  int res = 0;
   socklen_t recsize = sizeof(csin);
 
   //Afficher son adresse IP
@@ -67,7 +68,7 @@ void host(SOCKET *sock, SOCKET *csock, SOCKADDR_IN *sin, SOCKADDR_IN *csin){
     if(sock_err != SOCKET_ERROR){
       printf(SOCK_WAITING, port);
       *csock = accept(*sock, (SOCKADDR *) csin, &recsize);
-
+      res = 1;
     }else{
       couleur(31);
       printf(ERR_NETWORK);
@@ -77,4 +78,6 @@ void host(SOCKET *sock, SOCKET *csock, SOCKADDR_IN *sin, SOCKADDR_IN *csin){
     couleur(31);
     printf(ERR_NETWORK);
     couleur(0);
-  }}
+  }
+  return res;
+}

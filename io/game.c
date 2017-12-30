@@ -39,9 +39,7 @@ int loadGame(Square tab[][TAILLE], Team red, Team blue, Data *dataBuff){
   int x = 0, y = 0;
 
   if(map_type == NULL || map_isFill == NULL || pieces_teamNum == NULL || pieces_type == NULL || data == NULL){
-    fprintf(stderr, "Erreur de lecture de sauvegarde. Un fichier est manquant.\n");
-    //TODO creer le fichier manquant
-    // printf("Fichier de sauvegarde créé.\n");
+    fprintf(stderr, ERR_LOAD_FILE);
     return 1;
   }else{
     int valMapType;
@@ -212,7 +210,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
 
     fclose(data);
     printf(SAVE_DATA);
-    }
+  }
 
   printf(SAVE);
 }

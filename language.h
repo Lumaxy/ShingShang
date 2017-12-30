@@ -17,6 +17,7 @@
 /* ---- Erreur ---- */
 #define ERR "Erreur\n"
 #define ERR_NO_FILE "Pas de fichier.\n"
+#define ERR_LOAD_FILE "Erreur de lecture de sauvegarde. Un fichier est manquant.\n"
 /* ---- ------ ---- */
 
 /* ---- SOCKETS ---- */
@@ -110,6 +111,7 @@
 
 #define ERR "Error\n"
 #define ERR_NO_FILE "No file.\n"
+#define ERR_LOAD_FILE "Can't load. A file is missing.\n"
 
 /* ---- SAVE ---- */
 #define INFO_NEW_SAVE "Backup file created.\n"
@@ -159,7 +161,7 @@
 
 /* ---- JUMP ---- */
 #define ERR_JUMP_BACK "Impossible to go back\n"
-#define ERR_JUMP_DISTANCE "Target is too far\n"
+#define ERR_JUMP_DISTANCE "Can't jump\n"
 #define JUMP_AGAIN "Do you want to jump again? O/N (%d pos)\n"
 /* ---- ---- ---- */
 
