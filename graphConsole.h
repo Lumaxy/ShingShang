@@ -2,6 +2,8 @@
 #define GRAPHCONSOLE_H
 #define TAILLE 10
 
+#include "structure.h"
+
 //Fonction Graphique
 void printMap(Square map[][TAILLE], Config config);
 void clear();

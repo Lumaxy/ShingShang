@@ -2,7 +2,7 @@
 #define COOR_H
 #define TAILLE 10
 
-void getCoor(Coordonnees *coor);
-int testCoor(Coordonnees position, Square map[][TAILLE], int player);
+void getCoor(Coordinate *coor);
+int testCoor(Coordinate position, Square map[][TAILLE], int player);
 
 #endif

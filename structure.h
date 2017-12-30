@@ -1,17 +1,23 @@
-#ifndef structure_H
-#define structure_H
+#ifndef STRUCT_H
+#define STRUCT_H
 
 //Structures
 typedef struct Team Team;
 struct Team{
   int color;
-  int numEquip;
+  int teamNum;
   char name[255];
+};
+
+typedef struct Coordinate Coordinate;
+struct Coordinate{
+  int x;
+  int y;
 };
 
 typedef struct Piece Piece;
 struct Piece{
-  int x, y;
+  Coordinate position;
   // 3 Dragon / 2 Lion / 1 Singe
   int type;
   struct Team team;
@@ -38,18 +44,12 @@ struct Config{
   int frameColor;
 };
 
-typedef struct Coordonnees Coordonnees;
-struct Coordonnees{
-  int x;
-  int y;
-};
-
 typedef struct Data Data;
 struct Data{
   int player;
   int nbDragRed;
   int nbDragBlue;
   int switchPlayer;
-  Coordonnees oldBushi;
+  Coordinate oldBushi;
 };
 #endif

@@ -1,11 +1,12 @@
 #include "../structure.h"
+#include "../language.h"
 #include "jump.h"
 #include "calcul.h"
 
 #include <stdio.h>
 #define TAILLE 10
 
-int numJump(Coordonnees position, Coordonnees old, Square map[][TAILLE]){
+int numJump(Coordinate position, Coordinate old, Square map[][TAILLE]){
   int res = 0, i, j;
   Square center = map[position.x][position.y];
 
@@ -44,7 +45,7 @@ int numJump(Coordonnees position, Coordonnees old, Square map[][TAILLE]){
 
 //TODO: quand je choisis de nouveau la case il me change les coordonnées
 // et du coup ma case devient isFill == 0
-int testJump(Coordonnees position, Coordonnees target, Coordonnees old, Square map[][TAILLE]){
+int testJump(Coordinate position, Coordinate target, Coordinate old, Square map[][TAILLE]){
   int res = 0;
   // center = map[x][y];
   Piece p = map[position.x][position.y].piece;
@@ -53,7 +54,7 @@ int testJump(Coordonnees position, Coordonnees target, Coordonnees old, Square m
     if(map[target.x][target.y].type >= 0){
 
       if(old.x == target.x && old.y == target.y){
-        printf("Impossible de faire retour\n");
+        printf(ERR_JUMP_BACK);
       }else{
         if(distance(position, target) == 2*2 || distance(position, target) == 8){
           int xMoy = (position.x + target.x) / 2;
@@ -65,7 +66,7 @@ int testJump(Coordonnees position, Coordonnees target, Coordonnees old, Square m
             res = 1;
           }
         }else{
-          printf("La case n'est pas à la bonne distance de saut\n" );
+          printf(ERR_JUMP_DISTANCE);
         }
       }
     }

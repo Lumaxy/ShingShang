@@ -16,7 +16,7 @@ int loadGame(Square tab[][TAILLE], Team red, Team blue, Data *dataBuff){
   FILE *map_isFill;
 
   FILE *pieces_type;
-  FILE *pieces_numEquip;
+  FILE *pieces_teamNum;
 
   FILE *data;
 
@@ -24,21 +24,21 @@ int loadGame(Square tab[][TAILLE], Team red, Team blue, Data *dataBuff){
   char *map_type_name = "save/Map/type";
   char *map_isFill_name = "save/Map/isFill";
 
-  char *pieces_numEquip_name = "save/Pieces/numEquip";
+  char *pieces_teamNum_name = "save/Pieces/teamNum";
   char *pieces_type_name = "save/Pieces/type";
   char *data_name = "save/data";
 
   map_type = fopen(map_type_name, mode);
   map_isFill = fopen(map_isFill_name, mode);
 
-  pieces_numEquip = fopen(pieces_numEquip_name, mode);
+  pieces_teamNum = fopen(pieces_teamNum_name, mode);
   pieces_type = fopen(pieces_type_name, mode);
 
   data = fopen(data_name, mode);
 
   int x = 0, y = 0;
 
-  if(map_type == NULL || map_isFill == NULL || pieces_numEquip == NULL || pieces_type == NULL || data == NULL){
+  if(map_type == NULL || map_isFill == NULL || pieces_teamNum == NULL || pieces_type == NULL || data == NULL){
     fprintf(stderr, "Erreur de lecture de sauvegarde. Un fichier est manquant.\n");
     //TODO creer le fichier manquant
     // printf("Fichier de sauvegarde créé.\n");
@@ -52,12 +52,13 @@ int loadGame(Square tab[][TAILLE], Team red, Team blue, Data *dataBuff){
     //Chargement Plateau avec pions
     while(fscanf(map_type, "%d%c", &valMapType, &c) != EOF){
       fscanf(map_isFill, "%d%c", &valMapIsFill, &tmp);
-      fscanf(pieces_numEquip, "%d%c", &valPieceNumEquip, &tmp);
+      fscanf(pieces_teamNum, "%d%c", &valPieceNumEquip, &tmp);
       fscanf(pieces_type, "%d%c", &valPieceType, &tmp);
       tab[x][y].type = valMapType;
       tab[x][y].isFill = valMapIsFill;
       if(valMapIsFill == 1){
-        Piece p = {x, y, valPieceType, blue};
+        Coordinate tmp = {x, y};
+        Piece p = {tmp, valPieceType, blue};
         if(valPieceNumEquip == 1){
           p.team = red;
         }
@@ -80,7 +81,7 @@ int loadGame(Square tab[][TAILLE], Team red, Team blue, Data *dataBuff){
 
     fclose(map_type);
     fclose(map_isFill);
-    fclose(pieces_numEquip);
+    fclose(pieces_teamNum);
     fclose(pieces_type);
     fclose(data);
     return 0;
@@ -92,7 +93,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
   FILE *map_isFill;
 
   FILE *pieces_type;
-  FILE *pieces_numEquip;
+  FILE *pieces_teamNum;
 
   FILE *data;
 
@@ -106,7 +107,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
   char *map_type_name  = "save/Map/type";
   char *map_isFill_name  = "save/Map/isFill";
 
-  char *pieces_numEquip_name  = "save/Pieces/numEquip";
+  char *pieces_teamNum_name  = "save/Pieces/teamNum";
   char *pieces_type_name  = "save/Pieces/type";
   char *data_name = "save/data";
 
@@ -115,7 +116,7 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
   map_type = fopen(map_type_name, mode);
   map_isFill = fopen(map_isFill_name, mode);
 
-  pieces_numEquip = fopen(pieces_numEquip_name, mode);
+  pieces_teamNum = fopen(pieces_teamNum_name, mode);
   pieces_type = fopen(pieces_type_name, mode);
 
   data = fopen(data_name, mode);
@@ -178,23 +179,23 @@ void saveGame(Square tab[][TAILLE], Data dataBuff){
 
 
   //pieces_numTeam_name
-  if(pieces_numEquip == NULL){
-    fprintf(stderr, "Error while saving pieces_numEquip\n");
+  if(pieces_teamNum == NULL){
+    fprintf(stderr, "Error while saving pieces_teamNum\n");
   }else{
     for(y = 0; y < TAILLE; y++){
       for(x = 0; x < TAILLE; x++){
         if(tab[x][y].isFill == 1){
-          fprintf(pieces_numEquip, "%d", tab[x][y].piece.team.numEquip);
+          fprintf(pieces_teamNum, "%d", tab[x][y].piece.team.teamNum);
         }else{
-          fprintf(pieces_numEquip, "0");
+          fprintf(pieces_teamNum, "0");
         }
         if(x != TAILLE - 1){
-          fprintf(pieces_numEquip, ":");
+          fprintf(pieces_teamNum, ":");
         }
       }
-      fprintf(pieces_numEquip, "\n");
+      fprintf(pieces_teamNum, "\n");
     }
-    fclose(pieces_numEquip);
+    fclose(pieces_teamNum);
     printf(SAVE_PIECE_NUMEQUIP);
   }
 

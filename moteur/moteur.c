@@ -1,5 +1,4 @@
 #include "../language.h"
-
 #include "../structure.h"
 #include "../graphConsole.h"
 #include "moteur.h"
@@ -10,17 +9,14 @@
 //Fonction Moteur
 void testWin(int *isPlaying, Square map[][TAILLE]){
   //Portail rempli par un dragon de sa couleur ?
-  int team = 1;
   int x, y;
+
   for(y = 1; y < 9; y+=7){
-    team++;
     for(x = 4; x <= 5; x++){
       if(map[x][y].isFill == 1){
-        if(map[x][y].piece.type == 3){
-          if(map[x][y].piece.team.numEquip != team){
-            *isPlaying = 0;
-            printf("Victoire de l'équipe %s\n", map[x][y].piece.team.name);
-          }
+        if(map[x][y].piece.type == 3 && map[x][y].piece.team.teamNum == map[x][y].type){
+          *isPlaying = 0;
+          printf(VICTORY, map[x][y].piece.team.name);
         }
       }
     }
@@ -66,9 +62,29 @@ int choix(int i){
       x = (int)xChar - 48;
     }else{
       couleur(31);
-      printf("Format incorrect.\n");
+      printf(ERR_FORMAT);
       couleur(0);
     }
   }while(x < 1 || x > i);
   return x;
+}
+
+void codeMap(Square map[TAILLE][TAILLE], Square buffer[TAILLE*TAILLE]){
+  int x, y;
+
+  for(y = 0; y < TAILLE; y++){
+    for(x = 0; x < TAILLE; x++){
+      buffer[x * TAILLE + y] = map[x][y];
+    }
+  }
+}
+
+void decodeMap(Square map[TAILLE][TAILLE], Square buffer[TAILLE*TAILLE]){
+  int x, y;
+
+  for(y = 0; y < TAILLE; y++){
+    for(x = 0; x < TAILLE; x++){
+      map[x][y] = buffer[x * TAILLE + y];
+    }
+  }
 }

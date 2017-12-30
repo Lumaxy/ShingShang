@@ -1,5 +1,5 @@
 #include "../structure.h"
-#include "plateau.h"
+#include "board.h"
 
 void initPiece(Square map[][TAILLE], Team red, Team blue){
   int x,y;
@@ -7,7 +7,8 @@ void initPiece(Square map[][TAILLE], Team red, Team blue){
   //Haut Gauche
   for(y = 0; y < 3; y++){
     for(x = 1; x < 4 - y; x++){
-      Piece p = {x, y, 4 - (x + y), red};
+      Coordinate tmp = {x, y};
+      Piece p = {tmp, 4 - (x + y), red};
       map[x][y].piece = p;
       map[x][y].isFill = 1;
     }
@@ -16,7 +17,8 @@ void initPiece(Square map[][TAILLE], Team red, Team blue){
   //Haut Droite
   for(y = 0; y < 3; y++){
     for(x = 8; x > 5 + y ; x--){
-      Piece p = {x, y, x - (5+y), red};
+      Coordinate tmp = {x, y};
+      Piece p = {tmp, x - (5+y), red};
       map[x][y].piece = p;
       map[x][y].isFill = 1;
     }
@@ -25,7 +27,8 @@ void initPiece(Square map[][TAILLE], Team red, Team blue){
   // bas Gauche
   for(y = 7; y < 10; y++){
     for(x = 1; x < y - 5; x++){
-      Piece p = {x, y, (y-x)-5, blue};
+      Coordinate tmp = {x, y};
+      Piece p = {tmp, (y-x)-5, blue};
       map[x][y].piece = p;
       map[x][y].isFill = 1;
     }
@@ -34,12 +37,14 @@ void initPiece(Square map[][TAILLE], Team red, Team blue){
   // bas Droite
   for(y = 7; y < 10; y++){
     for(x = 8; x > 14 - y; x--){
-      Piece p = {x, y, (x+y) - 14, blue};
+      Coordinate tmp = {x, y};
+      Piece p = {tmp, (x+y) - 14, blue};
       map[x][y].piece = p;
       map[x][y].isFill = 1;
     }
   }
 }
+
 void initMap(Square map[][TAILLE]){
   int x, y;
 
@@ -67,9 +72,9 @@ void initMap(Square map[][TAILLE]){
   map[9][5].type = 0;
 
   //porte
-  int team = 1;
+  int team = 3;
   for(y = 1; y < 9; y+=7){
-    team++;
+    team--;
     for(x = 4; x <= 5; x++){
       map[x][y].type = team;
     }

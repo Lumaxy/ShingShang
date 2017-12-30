@@ -1,5 +1,5 @@
-#ifndef PLATEAU_H
-#define PLATEAU_H
+#ifndef BOARD_H
+#define BOARD_H
 #define TAILLE 10
 
 void initPiece(Square map[][TAILLE], Team red, Team blue);

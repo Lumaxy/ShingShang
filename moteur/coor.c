@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-void getCoor(Coordonnees *coor){
+void getCoor(Coordinate *coor){
   char xChar, yChar;
   int nbCarAfter = 0;
   coor->x = -1;
@@ -21,13 +21,13 @@ void getCoor(Coordonnees *coor){
         coor->x = (int)xChar - 48;
       }else{
         couleur(31);
-        printf("Format incorrect.\n");
+        printf(ERR_FORMAT);
         couleur(0);
       }
     }while(coor->x < 0 || coor->x > 9);
 
     do{
-      printf("Entrez y :\n");
+      printf(COOR_2);
       scanf("%c", &yChar);
 
       nbCarAfter = clearBuffer();
@@ -36,13 +36,13 @@ void getCoor(Coordonnees *coor){
         coor->y = (int)yChar - 48;
       }else{
         couleur(31);
-        printf("Format incorrect.\n");
+        printf(ERR_FORMAT);
         couleur(0);
       }
     }while(coor->y < 0 || coor->y > 9);
 }
 
-int testCoor(Coordonnees position, Square map[][TAILLE], int player){
+int testCoor(Coordinate position, Square map[][TAILLE], int player){
   int res = -1;
   Square tmp = map[position.x][position.y];
   //Case potable ?
@@ -51,7 +51,7 @@ int testCoor(Coordonnees position, Square map[][TAILLE], int player){
     if(tmp.isFill == 1){
       Piece p = tmp.piece;
       //Le pion lui appartient ?
-      if(p.team.numEquip == player){
+      if(p.team.teamNum == player){
         res = 1;
       }else{
         res = 2;

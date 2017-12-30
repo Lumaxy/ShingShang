@@ -4,7 +4,7 @@
 #define TAILLE 10
 
 //Check si le deplacement es tautorise : 1 si oui, 0 sinon.
-int testMove(Coordonnees position, Coordonnees target, Square map[][TAILLE]){
+int testMove(Coordinate position, Coordinate target, Square map[][TAILLE]){
   int res = 0;
   int tmp = 0; //Permet de ne pas repeter le test du coef directeur
 
@@ -49,7 +49,7 @@ int testMove(Coordonnees position, Coordonnees target, Square map[][TAILLE]){
 
   return res;
 }
-int numMove(Coordonnees position, Square map[][TAILLE]){
+int numMove(Coordinate position, Square map[][TAILLE]){
   int res = 0;
   int i, j;
 
@@ -73,10 +73,10 @@ int numMove(Coordonnees position, Square map[][TAILLE]){
   }
   return res;
 }
-void move(Square map[][TAILLE], Coordonnees target, Coordonnees *position, Coordonnees *old){
+void move(Square map[][TAILLE], Coordinate target, Coordinate *position, Coordinate *old){
   Piece p = map[position->x][position->y].piece; //Le pion a la position
-  p.x = target.x; //Nouvelle position
-  p.y = target.y;
+  p.position.x = target.x; //Nouvelle position
+  p.position.y = target.y;
 
   map[target.x][target.y].piece = p;
   map[target.x][target.y].isFill = 1;

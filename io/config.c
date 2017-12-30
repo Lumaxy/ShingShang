@@ -41,11 +41,11 @@ int loadConfig(Config *config){
     int squareChar;
 
     do {
-      fscanf(file,"%c", &c);
+      fscanf(file, "%c", &c);
       if(strcmp(property, "squareChar") == 0 && index == 0){
-        squareChar = ((int)c-48)*10;// - 48 pour la conversion ascii en vrai nombre
-      }else if(strcmp(property, "squareChar") == 0&& index == 1){
-        squareChar+= ((int)c-48 );
+        squareChar = ((int) c - 48) * 10;// - 48 pour la conversion ascii en vrai nombre
+      }else if(strcmp(property, "squareChar") == 0 && index == 1){
+        squareChar+= ((int) c - 48);
       }
 
       if(c != '\n'){
@@ -124,7 +124,6 @@ void configuration(Config *config){
     printf(CONF_3);
     printf(CONF_4);
     switch(choix(4)){
-      clear();
       case 1:
       printf(CONF_11);
       printf(CONF_12);
@@ -158,7 +157,6 @@ void configuration(Config *config){
       }
       break;
       case 3:
-      clear();
       printf(CONF_31);
       printf(CONF_32);
       printf(CONF_33);

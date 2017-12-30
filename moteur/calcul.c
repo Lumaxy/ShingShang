@@ -1,6 +1,6 @@
 #include "../structure.h"
 
-int distance(Coordonnees position,Coordonnees target){
+int distance(Coordinate position, Coordinate target){
   //Pour eviter la racine carre, je renvoie le res au carre.
   return ((position.x - target.x)*(position.x - target.x) + (position.y - target.y)*(position.y - target.y));
 }

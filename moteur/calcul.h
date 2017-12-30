@@ -1,7 +1,7 @@
 #ifndef CALC_H
 #define CALC_H
 
-int distance(Coordonnees position, Coordonnees target);
+int distance(Coordinate position, Coordinate target);
 float abso(float x);
 
 #endif
